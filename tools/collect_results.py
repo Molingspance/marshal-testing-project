@@ -75,6 +75,15 @@ def main() -> int:
         matrix_result["stdout"] + ("\n" + matrix_result["stderr"] if matrix_result["stderr"] else ""),
     )
 
+    statement_coverage_result = run_command(
+        [sys.executable, str(ROOT / "tools" / "statement_coverage_demo.py")]
+    )
+    write_text(
+        results_dir / "statement_coverage_output.txt",
+        statement_coverage_result["stdout"]
+        + ("\n" + statement_coverage_result["stderr"] if statement_coverage_result["stderr"] else ""),
+    )
+
     generation_failures = run_generation_fuzz(count=args.fuzz_count, seed=args.fuzz_seed)
     lexical_summary = summarize_lexical_fuzz(seed=args.fuzz_seed)
     fuzzing_summary = {
@@ -92,13 +101,21 @@ def main() -> int:
             "lexical_loaded_count": lexical_summary["loaded"],
             "lexical_total": lexical_summary["total"],
         },
+        "statement_coverage_example_passed": statement_coverage_result["returncode"] == 0,
         "subprocess_matrix_passed": matrix_result["returncode"] == 0,
         "unittest_passed": unittest_result["returncode"] == 0,
     }
     write_json(results_dir / "local_run_summary.json", summary)
     print(json.dumps(summary, indent=2, sort_keys=True))
 
-    return 0 if summary["unittest_passed"] and summary["subprocess_matrix_passed"] and not generation_failures else 1
+    return (
+        0
+        if summary["unittest_passed"]
+        and summary["subprocess_matrix_passed"]
+        and summary["statement_coverage_example_passed"]
+        and not generation_failures
+        else 1
+    )
 
 
 if __name__ == "__main__":

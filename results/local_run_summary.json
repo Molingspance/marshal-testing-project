@@ -4,6 +4,7 @@
     "lexical_loaded_count": 9,
     "lexical_total": 30
   },
+  "statement_coverage_example_passed": true,
   "subprocess_matrix_passed": true,
   "unittest_passed": true
 }

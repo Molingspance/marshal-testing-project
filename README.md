@@ -42,6 +42,12 @@ Run the same-process and cross-process evidence collection:
 python tools/collect_results.py
 ```
 
+Run the concrete white-box statement-coverage example:
+
+```bash
+python tools/statement_coverage_demo.py
+```
+
 Run only the subprocess stability matrix:
 
 ```bash
@@ -64,6 +70,7 @@ python tools/collect_results.py --fuzz-count 5000
 
 - `results/hashes.json`: cross-process stability data for selected specimens
 - `results/fuzzing_summary.json`: generation-based and lexical fuzzing summary
+- `results/statement_coverage.md`: statement-coverage calculation for two white-box test cases
 - `results/source_checklist.md`: source-guided structural coverage checklist
 - `results/exploratory_sessions.md`: exploratory testing notes
 - `report/final_report.md`: concise final report aligned with the assignment

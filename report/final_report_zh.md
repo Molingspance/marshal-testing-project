@@ -55,6 +55,20 @@
 
 本项目中相应的代表样例由 `src/specimens.py` 构造，并由 `tests/test_roundtrip.py` 和 `tests/test_invalid_inputs.py` 调用验证。
 
+代表性测试用例如下：
+
+- `none`：最基本的原子类型
+- `dict_string_keys`：典型字典等价类
+- `recursive_list`：递归结构等价类
+- `code_object_simple`：特殊可序列化对象等价类
+- `unsupported_function`：非法对象等价类
+
+Example test methods:
+
+- `test_all_valid_specimens_roundtrip()`：对主要合法等价类执行 round-trip 检查
+- `test_file_api_roundtrip()`：对若干代表性等价类执行 `dump/load` 文件接口检查
+- `test_unsupported_objects_raise_reasonable_exceptions()`：对非法等价类验证异常路径
+
 ### 2.2 Boundary Value Analysis
 
 由于许多问题往往出现在极端边界值附近，本项目针对 `marshal` 可能遇到的数值边界、特殊状态和边缘结构设计了专门的测试用例，直接验证其在关键条件下的稳定性与正确性。
@@ -72,6 +86,20 @@
 相应测试主要位于：
 
 - `tests/test_boundaries.py`
+
+代表性边界测试用例如下：
+
+- `int_255` / `int_256`
+- `int_2_63_minus_1` / `int_2_63`
+- `float_negative_zero`
+- `float_nan`
+- `bytes_all_byte_values`
+- `list_large`
+
+Example test methods:
+
+- `test_boundary_cases_roundtrip()`：检查边界值对象的 round-trip 正确性
+- `test_boundary_cases_stable_in_process()`：检查边界值对象在同一进程内 repeated dumps 的稳定性
 
 ### 2.3 Fuzz Testing
 
@@ -96,6 +124,17 @@
 
 这说明 `marshal` 在当前预算内对随机合法对象表现稳定，但对于损坏字节流，部分变异结果仍可能碰巧构成另一条合法 marshal 流。除此之外，本项目还用 `tests/test_invalid_inputs.py` 对典型非法对象和目标化的损坏字节流做了补充检查，例如函数、lambda、生成器、文件句柄、空字节流、无效 type tag 和截断对象，以验证 `marshal` 是否进入预期异常路径并抛出合理异常。
 
+代表性 fuzzing 输入模型如下：
+
+- 合法随机对象：2 到 4 层嵌套的 `list` / `tuple` / `dict` / `set` / `frozenset`
+- 目标化损坏输入：空字节流、截断流、非法 type tag、bit-flip 变异流
+
+Example test methods:
+
+- `test_generated_values_roundtrip_and_remain_stable()`：执行 generation-based fuzzing
+- `test_targeted_corrupted_streams_raise_reasonable_exceptions()`：检查目标化损坏流的异常路径
+- `test_lexical_fuzzing_does_not_crash_process()`：执行 lexical fuzzing 并统计异常结果
+
 ## 3 White-Box Testing
 
 白盒测试关注 `marshal` 内部结构与实现路径的覆盖情况，目标是尽可能确保在主要语句、分支和条件路径上，同一输入对象都能产生稳定的序列化行为。本项目没有重新编译并插桩 CPython，因此没有给出精确的覆盖率百分比；相反，我们采用源码导向的代表路径覆盖方法，将 `marshal.c` 中的主要类型分发和错误路径与测试样例进行映射。
@@ -117,9 +156,28 @@
 
 我们优先确保每一类主要处理语句都被代表样例触发，并结合 round-trip 与稳定性检查，对这些语句路径上的输出进行验证。
 
+此外，为了在报告中给出一个可以明确计算覆盖率的语句覆盖示例，本项目选取了 `src/oracles.py` 中处理递归/共享引用登记的 `_register_pair()` 作为代表性白盒目标，并设计了两个测试用例：
+
+- 测试用例 1：第一次看到一对新的 left/right 对象，覆盖“首次登记”路径
+- 测试用例 2：再次看到已经登记过的同一对 left/right 对象，覆盖“已登记重访”路径
+
+利用 `tools/statement_coverage_demo.py` 对该函数进行语句覆盖计算后，结果如下：
+
+- 测试用例 1 的语句覆盖率为 `88.89%`
+- 测试用例 2 的语句覆盖率为 `66.67%`
+- 两个测试用例结合后的语句覆盖率为 `100.0%`
+
+这意味着：单独的任一测试用例都无法覆盖 `_register_pair()` 的所有可执行语句，但两者结合后可以覆盖该函数的全部 9 条可执行语句。
+
 对应的代表路径整理在：
 
 - `results/source_checklist.md`
+- `results/statement_coverage.md`
+
+Example test methods:
+
+- `test_register_pair_first_visit()`：覆盖 `_register_pair()` 中“首次登记”路径
+- `test_register_pair_revisit()`：覆盖 `_register_pair()` 中“已登记重访”路径
 
 ### 3.2 Branch Coverage
 
@@ -140,6 +198,13 @@
 - `tests/test_cycles.py`
 - `tests/test_invalid_inputs.py`
 - `tests/test_determinism.py`
+
+Example test methods:
+
+- `test_recursive_list_roundtrip_preserves_cycle()`：覆盖递归 list 分支
+- `test_recursive_dict_roundtrip_preserves_cycle()`：覆盖递归 dict 分支
+- `test_unsupported_objects_raise_reasonable_exceptions()`：覆盖非法对象异常分支
+- `test_targeted_corrupted_streams_raise_reasonable_exceptions()`：覆盖损坏字节流异常分支
 
 ### 3.3 Condition Coverage
 
@@ -165,6 +230,12 @@
 - `set_strings` / `frozenset_strings`
 
 因此，本项目的 condition coverage 体现为“关键条件均被代表性样例触发并验证”，而不是自动化插桩后的数值化覆盖率结果。
+
+Example test methods:
+
+- `test_boundary_cases_roundtrip()`：覆盖 `NaN`、`-0.0`、空容器等关键条件
+- `test_equivalent_handles_cycles_without_infinite_recursion()`：覆盖递归结构比较条件
+- `test_targeted_corrupted_streams_raise_reasonable_exceptions()`：覆盖截断流与非法 tag 条件
 
 ## 4 Compatibility Testing
 
@@ -192,6 +263,11 @@
 
 需要如实说明的是：当前打包进 `results/` 的结果主要来自本地 Windows 环境，因此本报告尚未展示完整的多操作系统实测对比数据。这意味着操作系统兼容性测试在本项目中已被设计并自动化配置，但本地证据仍以 Windows 为主。
 
+Example test methods / execution models:
+
+- `.github/workflows/tests.yml`：在 Windows、Linux、macOS 上运行同一套测试
+- `python tools/collect_results.py`：在当前环境收集本地证据
+
 ### 4.2 Different Python Versions
 
 作业同样明确提到了不同 Python 版本的影响。由于 `marshal` 官方本就不保证跨版本格式稳定，因此：
@@ -212,8 +288,6 @@
 
 因此，跨版本兼容性在本报告中体现为“测试设计与 CI 准备已覆盖”，而不是“本地报告中已经展示了所有版本的实测结果”。
 
-### 4.3 Same-OS Environment Variation
-
 除了操作系统和 Python 版本，本项目还补充了同一操作系统下的执行环境扰动测试。具体而言，我们在不同 `PYTHONHASHSEED` 下启动新进程，对相同对象重复执行 `marshal.dumps()`，并比较其 SHA-256 值。
 
 本地关键结果如下：
@@ -223,6 +297,11 @@
 - `dict_string_keys`、`dict_different_insertion_order`、`set_ints`、递归结构、共享引用和固定文件名代码对象在本地结果中保持稳定
 
 这说明：即使不更换操作系统，仅仅改变同一系统中的进程环境，也可能影响某些输入对象的 marshal 字节流稳定性，尤其是包含字符串元素的无序容器。
+
+Example test methods / execution models:
+
+- `test_repeated_dumps_are_hash_identical_in_one_process()`：检查同一进程内稳定性
+- `python tools/run_subprocess_matrix.py --all --output results/hashes.json`：检查不同 `PYTHONHASHSEED` 下的新进程结果
 
 ## 5 Traceability Matrix
 
@@ -237,6 +316,7 @@
 | Empty structure processing | `list_empty`, `dict_empty`, `bytes_empty` | empty values | random empty containers | same OS repeated runs |
 | Deep nesting processing | `list_nested`, `dict_nested` | large nested cases | recursive grammar generation | subprocess reruns |
 | Invalid input handling | unsupported function / file handle | truncated stream | mutated byte streams | repeated environment execution |
+| Statement Coverage example | `_register_pair()` first visit | `_register_pair()` revisit | not applicable | `results/statement_coverage.md` |
 
 ## 6 Key Findings
 
@@ -265,7 +345,7 @@
 尽管本项目较系统地覆盖了 `marshal` 在不同输入类型和环境因素下的行为，但仍存在以下局限与改进空间：
 
 1. 当前测试主要基于本地 Windows + Python 3.9.15 结果，跨操作系统和跨 Python 版本的完整实测证据尚未全部展示。
-2. 白盒测试采用的是源码导向代表路径覆盖，而不是插桩后的精确 statement / branch / condition 覆盖率。
+2. 白盒测试中，只有 `_register_pair()` 给出了精确的 statement coverage 计算结果；对于 `marshal.c` 的其他实现路径，项目仍采用源码导向代表路径覆盖，而不是插桩后的精确 statement / branch / condition 覆盖率。
 3. 本项目没有进行 mutation testing，也没有计算 mutation score。
 4. fuzzing 只能增加信心，不能证明不存在缺陷。
 5. 极深嵌套结构、极大对象和更多特殊平台架构仍可能存在未发现的兼容性问题。

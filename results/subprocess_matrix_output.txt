@@ -450,12 +450,12 @@
       "case_id": "set_strings",
       "exception": null,
       "hash_seed": "random",
-      "hex_prefix": "3c04000000da0462657461da0567616d",
+      "hex_prefix": "3c04000000da0564656c7461da05616c",
       "length": 32,
       "platform": "Windows-10-10.0.26200-SP0",
       "python_executable": "C:\\Users\\34285\\Miniconda3\\python.exe",
       "python_version": "3.9.15",
-      "sha256": "dc5ab7f320463ea59823da8a60deee241b022ec038828192015ce53c738a95c9"
+      "sha256": "2421cf34827fefb412d4ce99a937a9d0f6df74a43f19db5e84e402573c3f5e1a"
     },
     {
       "case_id": "frozenset_strings",
@@ -494,12 +494,12 @@
       "case_id": "frozenset_strings",
       "exception": null,
       "hash_seed": "random",
-      "hex_prefix": "3e04000000da05616c706861da056465",
+      "hex_prefix": "3e04000000da05616c706861da056761",
       "length": 32,
       "platform": "Windows-10-10.0.26200-SP0",
       "python_executable": "C:\\Users\\34285\\Miniconda3\\python.exe",
       "python_version": "3.9.15",
-      "sha256": "565c6693a3d9aa952df5a89691052c3e38bc51714a5c4cc02b3d3e6d414cdb6f"
+      "sha256": "8de943581881bf5cdcb6386432ce646cdb1472e090847dfd8fb4a4dfd30a1bc2"
     },
     {
       "case_id": "recursive_list",
@@ -756,7 +756,7 @@
       "stable_across_seeds": false,
       "unique_hash_count": 4,
       "unique_hashes": [
-        "565c6693a3d9aa952df5a89691052c3e38bc51714a5c4cc02b3d3e6d414cdb6f",
+        "8de943581881bf5cdcb6386432ce646cdb1472e090847dfd8fb4a4dfd30a1bc2",
         "9091aa682610b896c95014ec5a627cb0dc86966cfee17f92a3c98bb1aecceca9",
         "98706bc4327026f7e47f1b6c7d253b6534e352b47eb6c5946872e8673879de3f",
         "b99ccdb42efffc6de6d87d9c97b8159679c1f800491be8a83e575bd66d269a80"
@@ -825,10 +825,10 @@
       "stable_across_seeds": false,
       "unique_hash_count": 4,
       "unique_hashes": [
+        "2421cf34827fefb412d4ce99a937a9d0f6df74a43f19db5e84e402573c3f5e1a",
         "734f937b74ca3d7d5f4ffb0dec8e67ff9447bfbf03c6cbb2eda21d7cd5ceb884",
         "7363540d0f8b633d7a32ec2494495d47f6f5fa48f7e2035e5ea7d915331b996f",
-        "812ecb6fb3780a1e12b98ee85ca3e46c58e121d18a1a9b5e0b5b231ce66ec1f6",
-        "dc5ab7f320463ea59823da8a60deee241b022ec038828192015ce53c738a95c9"
+        "812ecb6fb3780a1e12b98ee85ca3e46c58e121d18a1a9b5e0b5b231ce66ec1f6"
       ],
       "unique_lengths": [
         32
