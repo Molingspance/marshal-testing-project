@@ -1,0 +1,9 @@
+{
+  "fuzzing": {
+    "generation_failure_count": 0,
+    "lexical_loaded_count": 9,
+    "lexical_total": 30
+  },
+  "subprocess_matrix_passed": true,
+  "unittest_passed": true
+}
