@@ -1,0 +1,10 @@
+
+...........D:\学校\3下\软件测试\course_files_export\marshal-testing-project\src\oracles.py:271: DeprecationWarning: co_lnotab is deprecated, use co_lines instead.
+  left_value = getattr(left, attr, sentinel)
+D:\学校\3下\软件测试\course_files_export\marshal-testing-project\src\oracles.py:272: DeprecationWarning: co_lnotab is deprecated, use co_lines instead.
+  right_value = getattr(right, attr, sentinel)
+.....
+----------------------------------------------------------------------
+Ran 16 tests in 0.842s
+
+OK

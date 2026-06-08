@@ -1,0 +1,47 @@
+{
+  "evidence_dir": "results-multi\\windows-py312",
+  "executable": "C:\\Users\\34285\\AppData\\Roaming\\uv\\python\\cpython-3.12.3-windows-x86_64-none\\python.exe",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "status": "passed",
+  "steps": [
+    {
+      "command": [
+        "C:\\Users\\34285\\AppData\\Roaming\\uv\\python\\cpython-3.12.3-windows-x86_64-none\\python.exe",
+        "-m",
+        "compileall",
+        "src",
+        "tools",
+        "tests"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "Listing 'src'...\nListing 'tools'...\nListing 'tests'...\n"
+    },
+    {
+      "command": [
+        "C:\\Users\\34285\\AppData\\Roaming\\uv\\python\\cpython-3.12.3-windows-x86_64-none\\python.exe",
+        "-m",
+        "unittest"
+      ],
+      "returncode": 0,
+      "stderr": "...........D:\\\u5b66\u6821\\3\u4e0b\\\u8f6f\u4ef6\u6d4b\u8bd5\\course_files_export\\marshal-testing-project\\src\\oracles.py:271: DeprecationWarning: co_lnotab is deprecated, use co_lines instead.\n  left_value = getattr(left, attr, sentinel)\nD:\\\u5b66\u6821\\3\u4e0b\\\u8f6f\u4ef6\u6d4b\u8bd5\\course_files_export\\marshal-testing-project\\src\\oracles.py:272: DeprecationWarning: co_lnotab is deprecated, use co_lines instead.\n  right_value = getattr(right, attr, sentinel)\n.....\n----------------------------------------------------------------------\nRan 16 tests in 0.792s\n\nOK\n",
+      "stdout": ""
+    },
+    {
+      "command": [
+        "C:\\Users\\34285\\AppData\\Roaming\\uv\\python\\cpython-3.12.3-windows-x86_64-none\\python.exe",
+        "tools/collect_results.py",
+        "--fuzz-count",
+        "2000",
+        "--fuzz-seed",
+        "20260607",
+        "--results-dir",
+        "D:\\\u5b66\u6821\\3\u4e0b\\\u8f6f\u4ef6\u6d4b\u8bd5\\course_files_export\\marshal-testing-project\\results-multi\\windows-py312"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "{\n  \"fuzzing\": {\n    \"generation_failure_count\": 0,\n    \"lexical_loaded_count\": 10,\n    \"lexical_total\": 30\n  },\n  \"statement_coverage_example_passed\": true,\n  \"unittest_passed\": true\n}\n"
+    }
+  ],
+  "version": "3.12"
+}
