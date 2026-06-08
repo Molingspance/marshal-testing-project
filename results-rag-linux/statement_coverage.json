@@ -1,0 +1,55 @@
+{
+  "combined": {
+    "coverage_percent": 100.0,
+    "covered_lines": [
+      174,
+      175,
+      176,
+      177,
+      179,
+      180,
+      182,
+      183,
+      184
+    ]
+  },
+  "statement_lines": [
+    174,
+    175,
+    176,
+    177,
+    179,
+    180,
+    182,
+    183,
+    184
+  ],
+  "target_file": "/home/liulong/school/marshal-testing-project/src/oracles.py",
+  "target_function": "_register_pair",
+  "test_case_1": {
+    "coverage_percent": 88.89,
+    "covered_lines": [
+      174,
+      175,
+      176,
+      177,
+      179,
+      182,
+      183,
+      184
+    ],
+    "description": "first visit of a new left/right object pair"
+  },
+  "test_case_2": {
+    "coverage_percent": 66.67,
+    "covered_lines": [
+      174,
+      175,
+      176,
+      177,
+      179,
+      180
+    ],
+    "description": "revisit of an already registered left/right object pair"
+  }
+}

@@ -20,6 +20,11 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--fuzz-count", type=int, default=DEFAULT_CASES)
     parser.add_argument("--fuzz-seed", type=int, default=DEFAULT_SEED)
+    parser.add_argument(
+        "--results-dir",
+        default="results",
+        help="directory where evidence files are written; defaults to results/",
+    )
     return parser.parse_args()
 
 
@@ -51,7 +56,9 @@ def write_json(path: Path, payload: dict) -> None:
 
 def main() -> int:
     args = parse_args()
-    results_dir = ROOT / "results"
+    results_dir = Path(args.results_dir)
+    if not results_dir.is_absolute():
+        results_dir = ROOT / results_dir
     results_dir.mkdir(parents=True, exist_ok=True)
 
     unittest_result = run_command([sys.executable, "-m", "unittest"])
