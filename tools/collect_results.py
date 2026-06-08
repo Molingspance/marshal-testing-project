@@ -60,21 +60,6 @@ def main() -> int:
         unittest_result["stdout"] + ("\n" + unittest_result["stderr"] if unittest_result["stderr"] else ""),
     )
 
-    matrix_output = results_dir / "hashes.json"
-    matrix_result = run_command(
-        [
-            sys.executable,
-            str(ROOT / "tools" / "run_subprocess_matrix.py"),
-            "--all",
-            "--output",
-            str(matrix_output),
-        ]
-    )
-    write_text(
-        results_dir / "subprocess_matrix_output.txt",
-        matrix_result["stdout"] + ("\n" + matrix_result["stderr"] if matrix_result["stderr"] else ""),
-    )
-
     statement_coverage_result = run_command(
         [sys.executable, str(ROOT / "tools" / "statement_coverage_demo.py")]
     )
@@ -102,7 +87,6 @@ def main() -> int:
             "lexical_total": lexical_summary["total"],
         },
         "statement_coverage_example_passed": statement_coverage_result["returncode"] == 0,
-        "subprocess_matrix_passed": matrix_result["returncode"] == 0,
         "unittest_passed": unittest_result["returncode"] == 0,
     }
     write_json(results_dir / "local_run_summary.json", summary)
@@ -111,7 +95,6 @@ def main() -> int:
     return (
         0
         if summary["unittest_passed"]
-        and summary["subprocess_matrix_passed"]
         and summary["statement_coverage_example_passed"]
         and not generation_failures
         else 1

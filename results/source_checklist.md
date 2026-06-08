@@ -13,10 +13,10 @@ one representative test.
 | floats and special values | `float_negative_zero`, `float_inf`, `float_nan`, `complex_with_nan` | `tests/test_boundaries.py`, `tests/test_roundtrip.py` |
 | strings and bytes | `string_unicode`, `string_long`, `bytes_null`, `bytes_all_byte_values`, `bytes_long` | `tests/test_boundaries.py` |
 | sequential containers | `list_nested`, `list_large`, `tuple_nested`, `tuple_large` | `tests/test_boundaries.py`, `tests/test_roundtrip.py` |
-| mappings | `dict_nested`, `dict_large`, `dict_different_insertion_order` | `tests/test_boundaries.py`, `tests/test_roundtrip.py`, `tools/run_subprocess_matrix.py` |
-| sets and frozensets | `set_strings`, `set_large_ints`, `frozenset_strings`, `frozenset_large_ints` | `tests/test_determinism.py`, `tools/run_subprocess_matrix.py` |
+| mappings | `dict_nested`, `dict_large`, `dict_different_insertion_order` | `tests/test_boundaries.py`, `tests/test_roundtrip.py` |
+| sets and frozensets | `set_empty`, `set_ints`, `set_large_ints`, `frozenset_empty`, `frozenset_large_ints` | `tests/test_boundaries.py`, `tests/test_roundtrip.py` |
 | recursive reference handling | `recursive_list`, `recursive_dict`, `indirect_recursive_list`, `shared_reference_list` | `tests/test_cycles.py`, `tests/test_roundtrip.py` |
-| code object support | `code_object_simple` | `tests/test_roundtrip.py`, `tests/test_determinism.py`, `tools/run_subprocess_matrix.py` |
+| code object support | `code_object_simple` | `tests/test_roundtrip.py` |
 | unsupported object rejection | `unsupported_function`, `unsupported_instance`, `unsupported_file_handle` | `tests/test_invalid_inputs.py` |
 | invalid type tags / truncated input | `b""`, `b"\xff"`, truncated streams, mutated streams | `tests/test_invalid_inputs.py`, `src/fuzz_generator.py` |
 

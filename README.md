@@ -10,12 +10,11 @@ Public repository: <https://github.com/Molingspance/marshal-testing-project>
 The project checks two core concerns:
 
 - correctness: whether `marshal.loads(marshal.dumps(x))` reconstructs an equivalent value
-- stability: whether the same logical input produces hash-identical bytes within one process and across subprocesses
+- stability: whether the same logical input produces hash-identical bytes within one process
 
 The suite combines representative fixed specimens, boundary-value tests,
-negative tests, recursive-structure tests, same-process determinism checks,
-cross-process `PYTHONHASHSEED` comparison, generation-based fuzzing, and
-lexical fuzzing for corrupted byte streams.
+negative tests, recursive-structure tests, same-process stability checks,
+generation-based fuzzing, and lexical fuzzing for corrupted byte streams.
 
 ## Project Layout
 
@@ -23,7 +22,7 @@ lexical fuzzing for corrupted byte streams.
 marshal-testing-project/
   src/        helper modules, specimens, and oracles
   tests/      unittest-based test suite
-  tools/      subprocess matrix runner and result collection scripts
+  tools/      result collection and statement-coverage scripts
   results/    generated evidence and analysis notes
   report/     final report
 ```
@@ -36,7 +35,7 @@ Run the unit test suite:
 python -m unittest
 ```
 
-Run the same-process and cross-process evidence collection:
+Run the local evidence collection:
 
 ```bash
 python tools/collect_results.py
@@ -48,30 +47,38 @@ Run the concrete white-box statement-coverage example:
 python tools/statement_coverage_demo.py
 ```
 
-Run only the subprocess stability matrix:
-
-```bash
-python tools/run_subprocess_matrix.py --all --output results/hashes.json
-```
-
 Increase the generation-fuzzing workload when needed:
 
 ```bash
 python tools/collect_results.py --fuzz-count 5000
 ```
 
+## Manual Compatibility Runs
+
+Run the same commands on Windows, macOS, and Linux when collecting
+cross-operating-system evidence. On macOS and Linux, use `python3` if `python`
+does not point to Python 3:
+
+```bash
+python3 -c "import platform, sys; print(sys.version); print(platform.platform())"
+python3 -m compileall src tools tests
+python3 -m unittest
+python3 tools/collect_results.py --fuzz-count 2000
+```
+
+The key summary is written to `results/local_run_summary.json`.
+
 ## Environment
 
 - local baseline used for the bundled evidence: Python 3.9.15 on Windows
-- CI matrix: Windows, Linux, and macOS on Python 3.10-3.13
+- Continuous Integration workflow: Windows, Linux, and macOS on Python 3.10-3.13
 - dependencies: Python standard library only
 
 ## Main Evidence Files
 
-- `results/hashes.json`: cross-process stability data for selected specimens
 - `results/fuzzing_summary.json`: generation-based and lexical fuzzing summary
 - `results/statement_coverage.md`: statement-coverage calculation for two white-box test cases
-- `results/source_checklist.md`: source-guided structural coverage checklist
+- `results/source_checklist.md`: source-guided structural analysis checklist
 - `results/exploratory_sessions.md`: exploratory testing notes
 - `report/final_report.md`: concise final report aligned with the assignment
 

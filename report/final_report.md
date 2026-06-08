@@ -14,9 +14,8 @@ The consistency of `marshal` output may be affected by several factors, such as:
 - different Python versions
 - special floating-point values and sign handling
 - recursive structures and shared references
-- the internal iteration order of unordered containers
 
-Therefore, this project designs a test suite around the stability and correctness of `marshal`. The suite combines Black-Box Testing and White-Box Testing ideas, covering Equivalence Partitioning, Boundary Value Analysis, Fuzz Testing, source-guided structural coverage, and environment-difference testing. It systematically investigates the question of whether the same input always produces hash-identical output.
+Therefore, this project designs a test suite around the stability and correctness of `marshal`. The suite combines Black-Box Testing and White-Box Testing ideas, covering Equivalence Partitioning, Boundary Value Analysis, Fuzz Testing, source-guided structural analysis, and environment-difference testing. It systematically investigates the question of whether the same input always produces hash-identical output.
 
 This report explains the test oracles, test design, Traceability Matrix, key findings, and limitations of the `marshal` test suite.
 
@@ -31,7 +30,7 @@ Because the behavior of `marshal` cannot be judged by plain equality alone, the 
 
 ## 2 Black-Box Testing
 
-The goal of Black-Box Testing is to evaluate and verify the stability and correctness of the `marshal` module from the user's perspective. The tests do not depend on implementation details; instead, they focus on whether identical inputs produce identical outputs and whether deserialized objects remain correct. This helps expose potential defects, boundary issues, and environment-sensitive behavior through input design and output comparison.
+The goal of Black-Box Testing is to evaluate and verify the stability and correctness of the `marshal` module from the user's perspective. The tests do not depend on implementation details; instead, they focus on whether identical inputs produce identical outputs and whether deserialized objects remain correct. This helps expose potential defects and boundary issues through input design and output comparison.
 
 To begin understanding how `marshal` behaves, the project first selects identical input objects and checks whether `marshal.dumps(obj)` consistently produces the same serialized output, especially across different data types and edge-case scenarios. To achieve this, the Black-Box Testing part mainly uses the following methods:
 
@@ -137,78 +136,68 @@ Example test methods:
 
 ## 3 White-Box Testing
 
-White-Box Testing focuses on the internal structure and implementation paths of `marshal`. The goal is to ensure, as far as possible, that the same input object produces stable serialization behavior along the main statements, branches, and conditions. This project does not rebuild or instrument CPython, so it does not report exact coverage percentages. Instead, it uses a source-guided representative-path approach that maps the major type-dispatch and error paths in `marshal.c` to concrete test cases.
+White-Box Testing focuses on the internal structure and implementation paths of the program under test. In the strict form taught in structural testing, statement coverage, branch coverage, and condition coverage are measured from real executed source-code paths.
+
+For Python's `marshal` module, exact C-level coverage would require rebuilding CPython with coverage instrumentation and then running the test suite with that specially built interpreter. This project does not rebuild or instrument CPython, so it does not report exact statement, branch, or condition coverage percentages for `Python/marshal.c`.
+
+Instead, the project uses a source-guided representative-path approach. It reads the major type-dispatch and error-handling paths in `marshal.c`, maps them to concrete Python specimens, and validates the observed behavior through round-trip, stability, and exception checks. The only numeric coverage example in this project is for the helper function `_register_pair()` in `src/oracles.py`, which is part of the project's own comparison oracle.
 
 ### 3.1 Statement Coverage
 
-Statement Coverage requires the tests to trigger the main executable statements. For `marshal`, this helps verify that all core object types pass through real serialization paths and that no major type, structure, or exception path is left untested.
+Statement Coverage requires every executable statement to be executed at least once. Because this project does not instrument CPython, it does not claim exact statement coverage for `marshal.c`. For `marshal`, the practical objective is to exercise the main serialization and error-handling paths with representative inputs.
 
-The project designs test inputs around the main object-handling statements of `marshal`, with emphasis on:
+The project focuses on the following representative statements:
 
-- `None`, `True`, `False`, `Ellipsis`, `StopIteration`
-- `int`, `float`, `complex`
-- `str`, `bytes`
-- `list`, `tuple`, `dict`
-- `set`, `frozenset`
-- code objects
-- recursive structures and shared references
-- exception paths for unsupported objects and corrupted byte streams
+- singleton objects: `None`, `True`, `False`, `Ellipsis`, `StopIteration`
+- numeric objects: `int`, `float`, `complex`
+- text and binary objects: `str`, `bytes`
+- container objects: `list`, `tuple`, `dict`, `set`, `frozenset`
+- special cases: code objects, recursive structures, shared references, unsupported objects, and corrupted byte streams
 
-The priority is to ensure that each major processing statement is exercised by at least one representative specimen, and then validate the outputs through round-trip and stability checks.
+Each class is exercised by at least one representative specimen and then checked by round-trip and stability tests.
 
-In addition, to provide one statement-coverage example with explicit percentages, the project selects `_register_pair()` in `src/oracles.py` as a representative white-box target for recursive/shared-reference handling and designs two test cases:
+For an explicit numeric example inside the project code, the project uses `_register_pair()` in `src/oracles.py`:
 
-- Test case 1: the first visit of a new left/right object pair, exercising the "new registration" path
-- Test case 2: a revisit of an already registered left/right object pair, exercising the "already registered" path
-
-Using `tools/statement_coverage_demo.py`, the computed statement-coverage results are:
-
-- test case 1: `88.89%`
-- test case 2: `66.67%`
+- test case 1: first visit of a new left/right object pair, `88.89%`
+- test case 2: revisit of an already registered left/right object pair, `66.67%`
 - combined statement coverage: `100.0%`
 
-This means that neither test case alone covers every executable statement in `_register_pair()`, but together they cover all 9 executable statements in the function.
+Together, these two tests cover all 9 executable statements in `_register_pair()`. This numeric result is a representative white-box example for project code, not a C-level coverage result for `marshal.c`.
 
-The representative path mapping is summarized in:
+The detailed mapping is recorded in:
 
 - `results/source_checklist.md`
 - `results/statement_coverage.md`
 
 Example test methods:
 
-- `test_register_pair_first_visit()`: covers the "first registration" path in `_register_pair()`
-- `test_register_pair_revisit()`: covers the "already registered revisit" path in `_register_pair()`
+- `tests/test_statement_coverage.py::test_register_pair_first_visit()`: covers the "first registration" path
+- `tests/test_statement_coverage.py::test_register_pair_revisit()`: covers the "already registered revisit" path
 
 ### 3.2 Branch Coverage
 
-Branch Coverage requires all important decision points to be tested, such as type checks, exception paths, recursive-reference handling, and behavior differences for unordered containers under different environments. For `marshal`, different branches may lead to different serialized outputs, so Branch Coverage is important for checking whether the same input remains stable under all major branch implementations.
+Branch Coverage requires each important decision outcome to be executed at least once. The project does not measure exact branch coverage for `marshal.c`; instead, it exercises representative branch outcomes that are visible through the public `marshal` API:
 
-The project explicitly covers the following branches:
+- successful serialization / serialization exceptions
+- successful loading / corrupted-stream exceptions
+- normal containers / recursive or shared-reference containers
+- normal floats / special `NaN` and `-0.0`
 
-- valid objects serialize successfully / unsupported objects raise exceptions
-- valid byte streams load successfully / corrupted byte streams raise exceptions
-- normal container branches / recursive container branches / shared-reference branches
-- normal floating-point branches / special `NaN` and `-0.0` comparison branches
-- same-process stability branches / unstable branches under environment variation
-
-In particular, the `set_strings` and `frozenset_strings` tests reveal that under different `PYTHONHASHSEED` values, the same logical input object may produce different marshal byte streams. This is a typical example of environment-sensitive branch behavior.
-
-Representative tests include:
+Representative tests:
 
 - `tests/test_cycles.py`
 - `tests/test_invalid_inputs.py`
-- `tests/test_determinism.py`
 
 Example test methods:
 
-- `test_recursive_list_roundtrip_preserves_cycle()`: covers the recursive-list branch
-- `test_recursive_dict_roundtrip_preserves_cycle()`: covers the recursive-dictionary branch
-- `test_unsupported_objects_raise_reasonable_exceptions()`: covers the unsupported-object exception branch
-- `test_targeted_corrupted_streams_raise_reasonable_exceptions()`: covers the corrupted-byte-stream exception branch
+- `tests/test_cycles.py::test_recursive_list_roundtrip_preserves_cycle()`: covers the recursive-list branch
+- `tests/test_cycles.py::test_recursive_dict_roundtrip_preserves_cycle()`: covers the recursive-dictionary branch
+- `tests/test_invalid_inputs.py::test_unsupported_objects_raise_reasonable_exceptions()`: covers the unsupported-object exception branch
+- `tests/test_invalid_inputs.py::test_targeted_corrupted_streams_raise_reasonable_exceptions()`: covers the corrupted-byte-stream exception branch
 
 ### 3.3 Condition Coverage
 
-Condition Coverage focuses on whether each boolean condition is exercised with both True and False outcomes. For `marshal`, this gives a more fine-grained way to check whether special conditions can affect the final byte-level representation.
+Condition Coverage focuses on whether each boolean condition is exercised with both True and False outcomes. The project does not measure exact condition coverage for `marshal.c`; instead, it triggers representative conditions that are important for byte-level serialization behavior.
 
 The project emphasizes the following important conditions:
 
@@ -218,7 +207,6 @@ The project emphasizes the following important conditions:
 - whether a container contains recursive references
 - whether an input byte stream is truncated
 - whether the first type tag is invalid
-- whether the iteration order of an unordered container depends on the execution environment
 
 These conditions are triggered by representative specimens such as:
 
@@ -227,7 +215,6 @@ These conditions are triggered by representative specimens such as:
 - `list_empty` / `dict_empty`
 - `recursive_list` / `recursive_dict`
 - `invalid-tag` / `truncated-list`
-- `set_strings` / `frozenset_strings`
 
 Therefore, the project's Condition Coverage is expressed as representative condition triggering and validation, rather than numeric coverage results from automated instrumentation.
 
@@ -239,102 +226,37 @@ Example test methods:
 
 ## 4 Compatibility Testing
 
-The output of `marshal` may be affected by environmental factors. The purpose of Compatibility Testing is to compare identical test cases across different Python versions, different operating systems, and different environment perturbations in order to better understand how the environment affects marshal output.
+The compatibility testing plan covers the following environmental factors:
 
-This project mainly focuses on the following factors:
-
-- different operating systems
-- different Python versions
-- same-OS environment variation across new processes
-
-### 4.1 Different Operating Systems
-
-The assignment explicitly mentions that for the same Python version, `marshal` output should ideally remain consistent across different operating systems. Therefore, operating-system testing is an important part of the compatibility analysis.
-
-The project has already prepared a CI matrix for:
-
-- Windows
-- Linux
-- macOS
-
-The corresponding configuration is located in:
-
-- `.github/workflows/tests.yml`
-
-It should be stated clearly, however, that the result files currently bundled in `results/` mainly come from the local Windows environment. Therefore, this report does not yet present a complete cross-OS comparison with executed evidence. In other words, operating-system testing has been designed and automated in the project, but the bundled local evidence still comes mainly from Windows.
-
-Example test methods / execution models:
-
-- `.github/workflows/tests.yml`: runs the same suite on Windows, Linux, and macOS
-- `python tools/collect_results.py`: collects local evidence in the current environment
-
-### 4.2 Different Python Versions
-
-The assignment also explicitly mentions different Python versions. Since the `marshal` format is not guaranteed to remain stable across versions, two points are important:
-
-- differing byte streams across versions should not automatically be treated as bugs
-- such differences are still important targets in a stability investigation
-
-The prepared version matrix includes:
-
-- Python 3.10
-- Python 3.11
-- Python 3.12
-- Python 3.13
-
-The local bundled evidence in the current report, however, was collected with:
-
-- Python 3.9.15
-
-Therefore, cross-version compatibility in this report is represented by covered test design and CI preparation, rather than a complete set of executed results for every version.
-
-In addition to operating systems and Python versions, the project also includes execution-environment variation within the same OS. More specifically, it launches new processes under different `PYTHONHASHSEED` values, serializes the same objects repeatedly, and compares the resulting SHA-256 hashes.
-
-The key local results are:
-
-- `set_strings` produced 4 different hashes under 4 tested seeds
-- `frozenset_strings` produced 4 different hashes under 4 tested seeds
-- `dict_string_keys`, `dict_different_insertion_order`, `set_ints`, recursive structures, shared references, and the fixed-filename code object remained stable in the local results
-
-This shows that even without changing the operating system, changing the process environment alone may affect byte-level stability for some inputs, especially unordered containers containing strings.
-
-Example test methods / execution models:
-
-- `test_repeated_dumps_are_hash_identical_in_one_process()`: checks same-process stability
-- `python tools/run_subprocess_matrix.py --all --output results/hashes.json`: checks fresh-process results under different `PYTHONHASHSEED` values
+- Using the same `marshal` specimen set and test oracles, the same test cases should be run under different Python versions. The bundled local baseline uses Python 3.9.15, and the prepared Continuous Integration workflow covers Python 3.10, 3.11, 3.12, and 3.13. The comparison focuses on round-trip behavior and SHA-256 hashes of generated byte streams. Since `marshal` is an internal format and is not guaranteed to remain byte-stable across versions, version-level byte differences are treated as compatibility evidence rather than automatic defects.
+- Running the same Python version and identical test cases on different operating systems (Windows, Linux, and macOS), the project observes whether serialization results differ. The comparison focuses on portability-related factors such as file paths, text encoding, and system-level behavior. The automated workflow is an implementation of the Continuous Integration / CI-CD idea discussed in the lectures: the same test suite is run repeatedly in controlled environments.
 
 ## 5 Traceability Matrix
 
 | Test Objective / Requirement | Equivalence Class Example | Boundary Value Example | Fuzz Testing Example | Compatibility Testing Example |
 | --- | --- | --- | --- | --- |
-| Stability verification: identical input produces identical output | `dict_string_keys` | `int_256`, `float_negative_zero` | generated nested containers | `results/hashes.json` |
+| Stability verification: identical input produces identical output | `dict_string_keys` | `int_256`, `float_negative_zero` | generated nested containers | Continuous Integration workflow |
 | Correctness verification: objects remain equivalent after round-trip | `string_unicode`, `list_nested` | `float_nan`, `bytes_all_byte_values` | generated legal values | same-version repeated dumps |
 | Basic type processing | `int_one`, `float_one`, `string_ascii` | `int_huge`, `float_inf` | random scalar generation | same OS / same version |
-| Compound structure processing | `tuple_nested`, `dict_nested` | `list_large`, `dict_large` | nested random containers | subprocess matrix |
-| Special structure processing | `recursive_list`, `recursive_dict`, `shared_reference_list` | indirect recursion | generated nested recursion-free structures | same seed vs. different seed |
-| Extreme value processing | representative integer / float classes | `2**63`, `NaN`, `-0.0` | random large-range numbers | version matrix |
+| Compound structure processing | `tuple_nested`, `dict_nested` | `list_large`, `dict_large` | nested random containers | different operating systems and Python versions |
+| Special structure processing | `recursive_list`, `recursive_dict`, `shared_reference_list` | indirect recursion | generated nested recursion-free structures | different operating systems and Python versions |
+| Extreme value processing | representative integer / float classes | `2**63`, `NaN`, `-0.0` | random large-range numbers | different Python versions |
 | Empty structure processing | `list_empty`, `dict_empty`, `bytes_empty` | empty values | random empty containers | same OS repeated runs |
-| Deep nesting processing | `list_nested`, `dict_nested` | large nested cases | recursive grammar generation | subprocess reruns |
-| Invalid input handling | unsupported function / file handle | truncated stream | mutated byte streams | repeated environment execution |
+| Deep nesting processing | `list_nested`, `dict_nested` | large nested cases | recursive grammar generation | Continuous Integration workflow runs |
+| Invalid input handling | unsupported function / file handle | truncated stream | mutated byte streams | Continuous Integration workflow runs |
 | Statement Coverage example | `_register_pair()` first visit | `_register_pair()` revisit | not applicable | `results/statement_coverage.md` |
 
 ## 6 Key Findings
 
 Through Black-Box Testing and White-Box Testing, the project identified the following key findings.
 
-### 6.1 String-Based Sets Cause Output Differences Under Different `PYTHONHASHSEED`
-
-Phenomenon: for `set_strings` and `frozenset_strings`, `marshal.dumps()` produced different output hashes under different `PYTHONHASHSEED` values.
-
-Reason: `set` and `frozenset` are inherently unordered containers, and the iteration order of string elements depends on the hash seed. Therefore, even when the logical input is identical, the marshal output cannot be guaranteed to remain byte-identical across different processes.
-
-### 6.2 Round-Trip Correctness Holds for Representative Valid Inputs
+### 6.1 Round-Trip Correctness Holds for Representative Valid Inputs
 
 Phenomenon: for the representative valid inputs covered by the project, including primitive types, nested containers, recursive structures, shared references, and code objects, `marshal.loads(marshal.dumps(x))` reconstructed structures equivalent to the originals.
 
 Reason: the core goal of `marshal` is closer to object reconstruction than to cross-environment byte-level consistency. Within the current testing scope, it performs well in preserving object meaning after deserialization.
 
-### 6.3 Corrupted Byte Streams Do Not Always Fail
+### 6.2 Corrupted Byte Streams Do Not Always Fail
 
 Phenomenon: in lexical fuzzing, 9 out of 30 mutated byte streams were still successfully decoded instead of raising exceptions.
 
@@ -353,7 +275,7 @@ Although the project covers `marshal` behavior across a range of input types and
 Based on the current test results, the project makes the following recommendations:
 
 - If the goal is to reconstruct objects within the same environment, `marshal` is a reasonable choice.
-- If the goal is strict byte-level consistency across processes, platforms, or Python versions, `marshal` is not an appropriate serialization format.
+- If the goal is strict byte-level consistency across platforms or Python versions, `marshal` is not an appropriate serialization format.
 - If a use case requires stable and controllable cross-environment exchange, a more explicit protocol such as JSON, MessagePack, or a custom stable format should be preferred.
 
 ## 8 Conclusion
@@ -364,10 +286,10 @@ The test results show that:
 
 - `marshal` has good round-trip correctness for the representative valid inputs covered by the suite
 - within the same process, the output is usually stable
-- when the execution environment changes, especially for unordered containers of strings, the byte stream may no longer remain hash-identical
+- compatibility testing across operating systems and Python versions is prepared through the Continuous Integration workflow
 - `marshal` is better suited to preserving object reconstruction than to guaranteeing byte-level consistency across environments
 
-In summary, `marshal` is suitable for object persistence and internal data handling within the same runtime ecosystem. However, if a scenario requires strict cross-platform, cross-version, or cross-environment byte-level consistency, a more stable and controllable serialization scheme should be used instead.
+In summary, `marshal` is suitable for object persistence and internal data handling within the same runtime ecosystem. However, if a scenario requires strict cross-platform or cross-version byte-level consistency, a more stable and controllable serialization scheme should be used instead.
 
 ## 9 AI Usage Disclosure
 

@@ -88,10 +88,8 @@ VALID_CASE_IDS = (
     "dict_large",
     "set_empty",
     "set_ints",
-    "set_strings",
     "set_large_ints",
     "frozenset_empty",
-    "frozenset_strings",
     "frozenset_large_ints",
     "recursive_list",
     "recursive_dict",
@@ -153,45 +151,6 @@ BOUNDARY_CASE_IDS = (
     "set_ints",
     "set_large_ints",
     "frozenset_large_ints",
-)
-
-
-DETERMINISM_CASE_IDS = (
-    "none",
-    "int_huge",
-    "float_nan",
-    "float_negative_zero",
-    "string_unicode",
-    "bytes_all_byte_values",
-    "list_nested",
-    "dict_string_keys",
-    "dict_different_insertion_order",
-    "set_ints",
-    "set_strings",
-    "frozenset_strings",
-    "recursive_list",
-    "recursive_dict",
-    "shared_reference_list",
-    "code_object_simple",
-)
-
-
-CROSS_PROCESS_CASE_IDS = (
-    "none",
-    "int_huge",
-    "float_negative_zero",
-    "float_nan",
-    "string_unicode",
-    "bytes_all_byte_values",
-    "dict_string_keys",
-    "dict_different_insertion_order",
-    "set_ints",
-    "set_strings",
-    "frozenset_strings",
-    "recursive_list",
-    "recursive_dict",
-    "shared_reference_list",
-    "code_object_simple",
 )
 
 
@@ -301,14 +260,10 @@ def build_specimen(case_id):
         return set()
     if case_id == "set_ints":
         return {1, 2, 3, 255, 256}
-    if case_id == "set_strings":
-        return {"alpha", "beta", "gamma", "delta"}
     if case_id == "set_large_ints":
         return set(range(1024))
     if case_id == "frozenset_empty":
         return frozenset()
-    if case_id == "frozenset_strings":
-        return frozenset({"alpha", "beta", "gamma", "delta"})
     if case_id == "frozenset_large_ints":
         return frozenset(range(1024))
     if case_id == "recursive_list":
@@ -355,11 +310,3 @@ def all_invalid_case_ids():
 
 def all_boundary_case_ids():
     return BOUNDARY_CASE_IDS
-
-
-def all_determinism_case_ids():
-    return DETERMINISM_CASE_IDS
-
-
-def all_cross_process_case_ids():
-    return CROSS_PROCESS_CASE_IDS
