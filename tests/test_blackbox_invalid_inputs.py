@@ -6,8 +6,8 @@ from src.oracles import assert_raises_reasonable_exception
 from src.specimens import all_invalid_case_ids, build_specimen
 
 
-class InvalidInputTests(unittest.TestCase):
-    def test_unsupported_objects_raise_reasonable_exceptions(self):
+class BlackBoxInvalidInputTests(unittest.TestCase):
+    def test_unsupported_objects_raise_exceptions(self):
         for case_id in all_invalid_case_ids():
             with self.subTest(case_id=case_id):
                 value = build_specimen(case_id)
@@ -18,7 +18,7 @@ class InvalidInputTests(unittest.TestCase):
                     if close is not None:
                         close()
 
-    def test_targeted_corrupted_streams_raise_reasonable_exceptions(self):
+    def test_corrupted_streams_raise_exceptions(self):
         streams = {
             "empty": b"",
             "nul": b"\x00",
@@ -31,7 +31,7 @@ class InvalidInputTests(unittest.TestCase):
             with self.subTest(name=name):
                 assert_raises_reasonable_exception(lambda: marshal.loads(data))
 
-    def test_lexical_fuzzing_does_not_crash_process(self):
+    def test_lexical_fuzzing_handles_mutated_streams(self):
         summary = summarize_lexical_fuzz()
         self.assertGreater(summary["total"], 0)
         self.assertGreater(
@@ -43,4 +43,3 @@ class InvalidInputTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

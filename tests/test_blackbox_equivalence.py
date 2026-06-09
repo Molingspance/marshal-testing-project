@@ -4,13 +4,13 @@ from src.oracles import assert_file_roundtrip, assert_roundtrip, assert_stable_d
 from src.specimens import all_valid_case_ids, build_specimen
 
 
-class RoundTripTests(unittest.TestCase):
-    def test_all_valid_specimens_roundtrip(self):
+class BlackBoxEquivalenceTests(unittest.TestCase):
+    def test_valid_specimens_roundtrip(self):
         for case_id in all_valid_case_ids():
             with self.subTest(case_id=case_id):
                 assert_roundtrip(build_specimen(case_id))
 
-    def test_all_valid_specimens_stable_in_process(self):
+    def test_valid_specimens_stable_in_process(self):
         for case_id in all_valid_case_ids():
             with self.subTest(case_id=case_id):
                 assert_stable_dumps(build_specimen(case_id), repeats=5)

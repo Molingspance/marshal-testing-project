@@ -1,4 +1,4 @@
-"""Run the marshal test suite with multiple Python versions.
+"""Run compatibility checks across multiple Python versions.
 
 The script looks for Python 3.9, 3.10, 3.11, 3.12, and 3.13 by default.
 On Windows it prefers the Python launcher, for example ``py -3.11``. On
@@ -177,10 +177,10 @@ def run_for_interpreter(info: dict, args: argparse.Namespace, output_root: Path)
         ),
         ("unittest", info["command"] + ["-m", "unittest"]),
         (
-            "collect_results",
+            "run_local",
             info["command"]
             + [
-                "tools/collect_results.py",
+                "tools/run_local.py",
                 "--fuzz-count",
                 str(args.fuzz_count),
                 "--fuzz-seed",

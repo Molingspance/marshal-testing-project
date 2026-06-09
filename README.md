@@ -22,9 +22,9 @@ generation-based fuzzing, and lexical fuzzing for corrupted byte streams.
 marshal-testing-project/
   src/        helper modules, specimens, and oracles
   tests/      unittest-based test suite
-  tools/      result collection and statement-coverage scripts
+  tools/      result collection and multi-version runner scripts
   results-windows/    generated Windows evidence
-  results-rag-linux/  generated Linux server evidence
+  results-multi/      generated Windows multi-version evidence
   report/     final report
 ```
 
@@ -39,19 +39,19 @@ python -m unittest
 Run the local evidence collection:
 
 ```bash
-python tools/collect_results.py
+python tools/run_local.py
 ```
 
-Run the concrete white-box statement-coverage example:
+Run the source-guided white-box structural tests:
 
 ```bash
-python tools/statement_coverage_demo.py
+python tools/run_whitebox.py
 ```
 
 Increase the generation-fuzzing workload when needed:
 
 ```bash
-python tools/collect_results.py --fuzz-count 5000
+python tools/run_local.py --fuzz-count 5000
 ```
 
 ## Manual Compatibility Runs
@@ -64,7 +64,7 @@ does not point to Python 3:
 python3 -c "import platform, sys; print(sys.version); print(platform.platform())"
 python3 -m compileall src tools tests
 python3 -m unittest
-python3 tools/collect_results.py --fuzz-count 2000
+python3 tools/run_local.py --fuzz-count 2000
 ```
 
 The key summary is written to `results/local_run_summary.json`.
@@ -75,7 +75,7 @@ The project provides a one-command script for collecting executed evidence under
 Python 3.9, 3.10, 3.11, 3.12, and 3.13:
 
 ```bash
-python tools/run_multi_python.py
+python tools/run_compatibility.py
 ```
 
 This command tries to run the following Python versions by default:
@@ -93,7 +93,7 @@ For each available version, it automatically runs:
 ```text
 compileall
 unittest
-collect_results.py
+run_local.py
 ```
 
 On Windows, the per-version evidence is saved separately, for example:
@@ -113,26 +113,26 @@ results-multi/summary.json
 ```
 
 By default, the script searches for those Python versions, runs `compileall`,
-`unittest`, and `tools/collect_results.py`, then writes separate evidence
+`unittest`, and `tools/run_local.py`, then writes separate evidence
 folders under `results-multi/`. A version should only be described as tested
 after the script reports that version as passed.
 
 Use a smaller fuzzing workload for a quick smoke run:
 
 ```bash
-python tools/run_multi_python.py --fuzz-count 100
+python tools/run_compatibility.py --fuzz-count 100
 ```
 
 Fail the command when any requested version is missing:
 
 ```bash
-python tools/run_multi_python.py --strict
+python tools/run_compatibility.py --strict
 ```
 
 Run only selected versions:
 
 ```bash
-python tools/run_multi_python.py --versions 3.10 3.11
+python tools/run_compatibility.py --versions 3.10 3.11
 ```
 
 The manual commands below are useful when debugging a specific Python version.
@@ -148,20 +148,20 @@ Then run the same checks with a selected version, for example Python 3.10:
 ```powershell
 py -3.10 -m compileall src tools tests
 py -3.10 -m unittest
-py -3.10 tools\collect_results.py --fuzz-count 2000 --results-dir results-windows-py310
+py -3.10 tools\run_local.py --fuzz-count 2000 --results-dir results-windows-py310
 ```
 
 Repeat with other installed versions as needed:
 
 ```powershell
 py -3.11 -m unittest
-py -3.11 tools\collect_results.py --fuzz-count 2000 --results-dir results-windows-py311
+py -3.11 tools\run_local.py --fuzz-count 2000 --results-dir results-windows-py311
 
 py -3.12 -m unittest
-py -3.12 tools\collect_results.py --fuzz-count 2000 --results-dir results-windows-py312
+py -3.12 tools\run_local.py --fuzz-count 2000 --results-dir results-windows-py312
 
 py -3.13 -m unittest
-py -3.13 tools\collect_results.py --fuzz-count 2000 --results-dir results-windows-py313
+py -3.13 tools\run_local.py --fuzz-count 2000 --results-dir results-windows-py313
 ```
 
 The `--results-dir` value keeps the evidence from each Python version separate.
@@ -171,16 +171,16 @@ On Linux or macOS, use the versioned interpreter name if it is installed:
 ```bash
 python3.10 -m compileall src tools tests
 python3.10 -m unittest
-python3.10 tools/collect_results.py --fuzz-count 2000 --results-dir results-linux-py310
+python3.10 tools/run_local.py --fuzz-count 2000 --results-dir results-linux-py310
 
 python3.11 -m unittest
-python3.11 tools/collect_results.py --fuzz-count 2000 --results-dir results-linux-py311
+python3.11 tools/run_local.py --fuzz-count 2000 --results-dir results-linux-py311
 
 python3.12 -m unittest
-python3.12 tools/collect_results.py --fuzz-count 2000 --results-dir results-linux-py312
+python3.12 tools/run_local.py --fuzz-count 2000 --results-dir results-linux-py312
 
 python3.13 -m unittest
-python3.13 tools/collect_results.py --fuzz-count 2000 --results-dir results-linux-py313
+python3.13 tools/run_local.py --fuzz-count 2000 --results-dir results-linux-py313
 ```
 
 If a command such as `python3.12` is not found, that Python version is not
@@ -194,18 +194,16 @@ versions that actually completed.
 
 ## Environment
 
-- bundled Windows evidence: Python 3.9.15
-- bundled Linux server evidence: Python 3.10.12
+- bundled Windows evidence: Python 3.9, 3.10, 3.11, 3.12, and 3.13
 - prepared GitHub Actions workflow: Windows, Linux, and macOS on Python 3.10-3.13
 - dependencies: Python standard library only
 
 ## Main Evidence Files
 
 - `results-windows/fuzzing_summary.json`: Windows generation-based and lexical fuzzing summary
-- `results-windows/statement_coverage.md`: Windows statement-coverage calculation for two white-box test cases
-- `results-rag-linux/fuzzing_summary.json`: Linux generation-based and lexical fuzzing summary
-- `results-rag-linux/statement_coverage.md`: Linux statement-coverage calculation for two white-box test cases
-- `report/final_report.md`: concise final report aligned with the assignment
+- `results-windows/unittest_output.txt`: Windows unit-test evidence, including source-guided white-box tests
+- `results-multi/summary.json`: Windows multi-version evidence for Python 3.9-3.13
+- `report/final_report.docx`: concise final report aligned with the assignment
 
 ## AI Disclosure
 

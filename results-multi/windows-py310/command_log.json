@@ -16,7 +16,7 @@
       ],
       "returncode": 0,
       "stderr": "",
-      "stdout": "Listing 'src'...\nListing 'tools'...\nListing 'tests'...\n"
+      "stdout": "Listing 'src'...\nCompiling 'src\\\\__init__.py'...\nCompiling 'src\\\\fuzz_generator.py'...\nCompiling 'src\\\\oracles.py'...\nCompiling 'src\\\\specimens.py'...\nListing 'tools'...\nCompiling 'tools\\\\run_compatibility.py'...\nCompiling 'tools\\\\run_local.py'...\nCompiling 'tools\\\\run_whitebox.py'...\nListing 'tests'...\nCompiling 'tests\\\\__init__.py'...\nCompiling 'tests\\\\test_blackbox_boundary.py'...\nCompiling 'tests\\\\test_blackbox_equivalence.py'...\nCompiling 'tests\\\\test_blackbox_fuzzing.py'...\nCompiling 'tests\\\\test_blackbox_invalid_inputs.py'...\nCompiling 'tests\\\\test_blackbox_recursive_references.py'...\nCompiling 'tests\\\\test_blackbox_special_behaviors.py'...\nCompiling 'tests\\\\test_whitebox_branch.py'...\nCompiling 'tests\\\\test_whitebox_condition.py'...\nCompiling 'tests\\\\test_whitebox_statement.py'...\n"
     },
     {
       "command": [
@@ -26,14 +26,14 @@
         "unittest"
       ],
       "returncode": 0,
-      "stderr": "................\n----------------------------------------------------------------------\nRan 16 tests in 1.073s\n\nOK\n",
+      "stderr": "...............s.............\n----------------------------------------------------------------------\nRan 29 tests in 1.044s\n\nOK (skipped=1)\n",
       "stdout": ""
     },
     {
       "command": [
         "py",
         "-3.10",
-        "tools/collect_results.py",
+        "tools/run_local.py",
         "--fuzz-count",
         "2000",
         "--fuzz-seed",
@@ -43,7 +43,7 @@
       ],
       "returncode": 0,
       "stderr": "",
-      "stdout": "{\n  \"fuzzing\": {\n    \"generation_failure_count\": 0,\n    \"lexical_loaded_count\": 9,\n    \"lexical_total\": 30\n  },\n  \"statement_coverage_example_passed\": true,\n  \"unittest_passed\": true\n}\n"
+      "stdout": "{\n  \"fuzzing\": {\n    \"generation_failure_count\": 0,\n    \"lexical_loaded_count\": 9,\n    \"lexical_total\": 30\n  },\n  \"unittest_passed\": true\n}\n"
     }
   ],
   "version": "3.10"

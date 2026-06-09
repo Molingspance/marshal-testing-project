@@ -24,7 +24,7 @@ jobs:
         run: python -m compileall src tools tests
 
       - name: Run test suite and collect evidence
-        run: python tools/collect_results.py --fuzz-count 2000
+        run: python tools/run_local.py --fuzz-count 2000
 
       - name: Upload evidence
         if: always()

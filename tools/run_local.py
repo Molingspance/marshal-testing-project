@@ -1,4 +1,4 @@
-"""Run the project checks and write evidence files into results/."""
+"""Run checks once in the current Python environment and write evidence."""
 
 from __future__ import annotations
 
@@ -67,15 +67,6 @@ def main() -> int:
         unittest_result["stdout"] + ("\n" + unittest_result["stderr"] if unittest_result["stderr"] else ""),
     )
 
-    statement_coverage_result = run_command(
-        [sys.executable, str(ROOT / "tools" / "statement_coverage_demo.py")]
-    )
-    write_text(
-        results_dir / "statement_coverage_output.txt",
-        statement_coverage_result["stdout"]
-        + ("\n" + statement_coverage_result["stderr"] if statement_coverage_result["stderr"] else ""),
-    )
-
     generation_failures = run_generation_fuzz(count=args.fuzz_count, seed=args.fuzz_seed)
     lexical_summary = summarize_lexical_fuzz(seed=args.fuzz_seed)
     fuzzing_summary = {
@@ -93,7 +84,6 @@ def main() -> int:
             "lexical_loaded_count": lexical_summary["loaded"],
             "lexical_total": lexical_summary["total"],
         },
-        "statement_coverage_example_passed": statement_coverage_result["returncode"] == 0,
         "unittest_passed": unittest_result["returncode"] == 0,
     }
     write_json(results_dir / "local_run_summary.json", summary)
@@ -102,7 +92,6 @@ def main() -> int:
     return (
         0
         if summary["unittest_passed"]
-        and summary["statement_coverage_example_passed"]
         and not generation_failures
         else 1
     )
