@@ -4,5 +4,8 @@
     "lexical_loaded_count": 10,
     "lexical_total": 30
   },
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python_version": "3.12.3",
+  "results_dir": "results\\results-windows-multi\\windows-py312",
   "unittest_passed": true
 }

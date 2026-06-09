@@ -10,8 +10,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        include:
+          - os: windows-latest
+            python-version: "3.10"
+            artifact-name: results-windows-py310
+            results-dir: results/results-windows-py310
+          - os: ubuntu-latest
+            python-version: "3.10"
+            artifact-name: results-linux-py310
+            results-dir: results/results-linux-py310
+          - os: macos-latest
+            python-version: "3.10"
+            artifact-name: results-macos-py310
+            results-dir: results/results-macos-py310
 
     steps:
       - uses: actions/checkout@v4
@@ -24,11 +35,11 @@ jobs:
         run: python -m compileall src tools tests
 
       - name: Run test suite and collect evidence
-        run: python tools/run_local.py --fuzz-count 2000
+        run: python tools/run_local.py --fuzz-count 2000 --results-dir ${{ matrix.results-dir }}
 
       - name: Upload evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: marshal-results-${{ matrix.os }}-py${{ matrix.python-version }}
-          path: results/
+          name: ${{ matrix.artifact-name }}
+          path: ${{ matrix.results-dir }}/

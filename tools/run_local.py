@@ -4,16 +4,39 @@ from __future__ import annotations
 
 import argparse
 import json
+import platform
 import subprocess
 import sys
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+REQUIRED_SINGLE_VERSION = (3, 10)
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from src.fuzz_generator import DEFAULT_CASES, DEFAULT_SEED, run_generation_fuzz, summarize_lexical_fuzz
+
+
+def platform_slug(system_name: str | None = None) -> str:
+    name = system_name or platform.system()
+    return {
+        "Windows": "windows",
+        "Linux": "linux",
+        "Darwin": "macos",
+    }.get(name, (name or "unknown").lower())
+
+
+def default_results_dir() -> str:
+    version = f"py{REQUIRED_SINGLE_VERSION[0]}{REQUIRED_SINGLE_VERSION[1]}"
+    return f"results/results-{platform_slug()}-{version}"
+
+
+def display_path(path: Path) -> str:
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
 
 
 def parse_args() -> argparse.Namespace:
@@ -22,8 +45,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--fuzz-seed", type=int, default=DEFAULT_SEED)
     parser.add_argument(
         "--results-dir",
-        default="results",
-        help="directory where evidence files are written; defaults to results/",
+        default=None,
+        help=(
+            "directory where evidence files are written; when running Python 3.10, "
+            "defaults to results/results-<os>-py310, for example "
+            "results/results-windows-py310"
+        ),
     )
     return parser.parse_args()
 
@@ -56,7 +83,17 @@ def write_json(path: Path, payload: dict) -> None:
 
 def main() -> int:
     args = parse_args()
-    results_dir = Path(args.results_dir)
+    if args.results_dir is None and sys.version_info[:2] != REQUIRED_SINGLE_VERSION:
+        expected = ".".join(str(part) for part in REQUIRED_SINGLE_VERSION)
+        actual = f"{sys.version_info.major}.{sys.version_info.minor}"
+        print(
+            f"error: default result output is reserved for Python {expected}; "
+            f"current interpreter is Python {actual}. Pass --results-dir explicitly.",
+            file=sys.stderr,
+        )
+        return 2
+
+    results_dir = Path(args.results_dir or default_results_dir())
     if not results_dir.is_absolute():
         results_dir = ROOT / results_dir
     results_dir.mkdir(parents=True, exist_ok=True)
@@ -84,6 +121,9 @@ def main() -> int:
             "lexical_loaded_count": lexical_summary["loaded"],
             "lexical_total": lexical_summary["total"],
         },
+        "platform": platform.platform(),
+        "python_version": platform.python_version(),
+        "results_dir": display_path(results_dir),
         "unittest_passed": unittest_result["returncode"] == 0,
     }
     write_json(results_dir / "local_run_summary.json", summary)

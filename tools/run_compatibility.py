@@ -1,8 +1,9 @@
 """Run compatibility checks across multiple Python versions.
 
 The script looks for Python 3.9, 3.10, 3.11, 3.12, and 3.13 by default.
-On Windows it prefers the Python launcher, for example ``py -3.11``. On
-Linux and macOS it looks for commands such as ``python3.11``.
+On Windows it prefers the Python launcher, for example ``py -3.11``. The
+default output directory is platform-specific, for example
+``results/results-windows-multi`` on Windows.
 """
 
 from __future__ import annotations
@@ -22,6 +23,19 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_VERSIONS = ("3.9", "3.10", "3.11", "3.12", "3.13")
 
 
+def platform_slug(system_name: str | None = None) -> str:
+    name = system_name or platform.system()
+    return {
+        "Windows": "windows",
+        "Linux": "linux",
+        "Darwin": "macos",
+    }.get(name, (name or "unknown").lower())
+
+
+def default_output_dir() -> str:
+    return f"results/results-{platform_slug()}-multi"
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -34,8 +48,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--fuzz-seed", type=int, default=20260607)
     parser.add_argument(
         "--output-dir",
-        default="results-multi",
-        help="parent directory for per-version evidence",
+        default=default_output_dir(),
+        help="parent directory for per-version evidence; defaults to results/results-<os>-multi",
     )
     parser.add_argument(
         "--strict",
@@ -77,6 +91,8 @@ def candidate_commands(version: str) -> list[list[str]]:
         for executable in py_launcher_executables().get(version, []):
             commands.append([executable])
 
+    commands.extend(conda_candidate_commands())
+
     executable_names = ["python", f"python{version}"]
     if os.name == "nt":
         executable_names.append(f"python{version.replace('.', '')}")
@@ -85,6 +101,29 @@ def candidate_commands(version: str) -> list[list[str]]:
         if shutil.which(name):
             commands.append([name])
 
+    return commands
+
+
+def conda_candidate_commands() -> list[list[str]]:
+    candidates: list[Path] = []
+
+    conda_prefix = os.environ.get("CONDA_PREFIX")
+    if conda_prefix:
+        candidates.append(Path(conda_prefix))
+
+    home = Path.home()
+    if os.name == "nt":
+        candidates.extend([home / "Miniconda3", home / "Anaconda3"])
+        executable_name = "python.exe"
+    else:
+        candidates.extend([home / "miniconda3", home / "anaconda3"])
+        executable_name = "bin/python"
+
+    commands: list[list[str]] = []
+    for prefix in candidates:
+        executable = prefix / executable_name
+        if executable.exists():
+            commands.append([str(executable)])
     return commands
 
 
@@ -154,7 +193,7 @@ def find_interpreter(version: str, seen_executables: set[str]) -> dict | None:
 
 
 def safe_label(system_name: str, version: str) -> str:
-    return f"{system_name.lower()}-py{version.replace('.', '')}"
+    return f"{platform_slug(system_name)}-py{version.replace('.', '')}"
 
 
 def display_path(path: Path) -> str:

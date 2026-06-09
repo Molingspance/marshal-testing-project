@@ -3,8 +3,8 @@
   left_value = getattr(left, attr, sentinel)
 D:\学校\3下\软件测试\course_files_export\marshal-testing-project\src\oracles.py:272: DeprecationWarning: co_lnotab is deprecated, use co_lines instead.
   right_value = getattr(right, attr, sentinel)
-.............s.............
+...........................
 ----------------------------------------------------------------------
-Ran 29 tests in 0.816s
+Ran 29 tests in 0.755s
 
-OK (skipped=1)
+OK
