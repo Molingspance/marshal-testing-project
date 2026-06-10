@@ -274,4 +274,3 @@ def _code_objects_equivalent(left, right, state):
             return False
 
     return _equivalent(left.co_consts, right.co_consts, state)
-

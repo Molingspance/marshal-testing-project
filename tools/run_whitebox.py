@@ -34,6 +34,7 @@ WHITEBOX_CONDITION_ITEMS = (
 )
 
 
+# Run only the modules used for source-guided white-box evidence.
 def run_whitebox_tests() -> unittest.TestResult:
     loader = unittest.TestLoader()
     suite = loader.loadTestsFromNames(WHITEBOX_TEST_MODULES)
@@ -41,6 +42,7 @@ def run_whitebox_tests() -> unittest.TestResult:
     return runner.run(suite)
 
 
+# Print the representative coverage table used in the report.
 def print_coverage_summary(success: bool) -> None:
     print()
     print("Source-guided white-box structural coverage")

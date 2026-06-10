@@ -209,6 +209,7 @@ BOUNDARY_CASE_IDS = (
 )
 
 
+# Build a fresh Python object for each stable test case identifier.
 def build_specimen(case_id):
     """Build a fresh representative value for a case identifier."""
     if case_id == "none":
@@ -432,6 +433,11 @@ def build_specimen(case_id):
     raise KeyError(f"unknown specimen case_id: {case_id}")
 
 
+# These display sample groups mirror representative values from the case-id based test suite above. 
+# They make console output and report screenshots easier to read; 
+# the full automated tests still use VALID_CASE_IDS, INVALID_CASE_IDS,
+# BOUNDARY_CASE_IDS, and the fuzzing generators.
+# Provide readable representative samples for equivalence-class evidence.
 def equivalence_class_samples():
     """Return display samples for equivalence-class report evidence."""
     recursive_list = []
@@ -460,6 +466,7 @@ def equivalence_class_samples():
     )
 
 
+# Provide readable representative samples for boundary-value evidence.
 def boundary_value_samples():
     """Return display samples for boundary-value report evidence."""
     deep_nested_list = "leaf"
@@ -490,8 +497,9 @@ def boundary_value_samples():
     )
 
 
+# Provide deterministic fuzz-like samples for evidence output.
 def fuzzing_display_samples():
-    """Return deterministic fuzzing examples for report evidence."""
+    """Return deterministic fuzzing examples for readable report evidence."""
     return OrderedDict(
         [
             (

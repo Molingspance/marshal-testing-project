@@ -4,6 +4,7 @@ from src.oracles import assert_file_roundtrip, assert_roundtrip, assert_stable_d
 from src.specimens import all_valid_case_ids, build_specimen
 
 
+# Validate representative equivalence classes for supported marshal values.
 class BlackBoxEquivalenceTests(unittest.TestCase):
     def test_valid_specimens_roundtrip(self):
         for case_id in all_valid_case_ids():

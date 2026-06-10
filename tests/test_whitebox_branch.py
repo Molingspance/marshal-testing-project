@@ -6,6 +6,7 @@ from src.oracles import assert_raises_reasonable_exception, assert_roundtrip
 from src.specimens import build_specimen
 
 
+# Detect whether the current Python exposes marshal's allow_code argument.
 def supports_allow_code():
     try:
         signature = inspect.signature(marshal.dumps)
@@ -14,6 +15,7 @@ def supports_allow_code():
     return "allow_code" in signature.parameters
 
 
+# Exercise representative marshal branch and decision outcomes.
 class MarshalBranchCoverageTests(unittest.TestCase):
     def test_supported_and_unsupported_dump_paths(self):
         supported = build_specimen("dict_nested")

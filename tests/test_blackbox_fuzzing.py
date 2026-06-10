@@ -4,6 +4,7 @@ import unittest
 from src.fuzz_generator import DEFAULT_SEED, run_generation_fuzz
 
 
+# Validate generated fuzzing values with round-trip and stability oracles.
 class BlackBoxGenerationFuzzingTests(unittest.TestCase):
     def test_generated_values_roundtrip_and_stability(self):
         count = int(os.environ.get("MARSHAL_FUZZ_CASES", "1000"))

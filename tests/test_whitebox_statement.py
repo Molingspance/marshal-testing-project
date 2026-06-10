@@ -5,6 +5,7 @@ from src.oracles import assert_file_roundtrip, assert_roundtrip, assert_stable_d
 from src.specimens import build_specimen
 
 
+# Exercise representative statement-level marshal read/write paths.
 class MarshalStatementCoverageTests(unittest.TestCase):
     def test_representative_type_write_read_paths(self):
         case_ids = (

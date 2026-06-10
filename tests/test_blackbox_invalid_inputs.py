@@ -6,6 +6,7 @@ from src.oracles import assert_raises_reasonable_exception
 from src.specimens import all_invalid_case_ids, build_specimen
 
 
+# Validate that unsupported objects and malformed byte streams fail cleanly.
 class BlackBoxInvalidInputTests(unittest.TestCase):
     def test_unsupported_objects_raise_exceptions(self):
         for case_id in all_invalid_case_ids():
