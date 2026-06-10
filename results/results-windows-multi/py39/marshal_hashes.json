@@ -1,0 +1,810 @@
+{
+  "items": [
+    {
+      "case_id": "int",
+      "description": "int 42",
+      "dump_length": 5,
+      "sha256": "3c3e5f0b175ca9da4f2e28aaa9b4a9c08f37369cd16d7de1b3901512c5f92e46",
+      "status": "ok"
+    },
+    {
+      "case_id": "float",
+      "description": "float 3.14159",
+      "dump_length": 9,
+      "sha256": "e74d2743340ae0c9211d4135b19015c8c5a2682cceee02b704599c1c7f704240",
+      "status": "ok"
+    },
+    {
+      "case_id": "str",
+      "description": "str 'hello world'",
+      "dump_length": 13,
+      "sha256": "233db27858826e2af6235757b42b2421d4cea8121c45fea323d58eb804810f5d",
+      "status": "ok"
+    },
+    {
+      "case_id": "unicode_str",
+      "description": "str '\u4f60\u597d\uff0c\u4e16\u754c'",
+      "dump_length": 20,
+      "sha256": "6f817facc3ac7e43d923f1c7e376fe6aa89d4bd56bc4007763c7bb1c41cd2700",
+      "status": "ok"
+    },
+    {
+      "case_id": "list",
+      "description": "list [1, 2, 3]",
+      "dump_length": 20,
+      "sha256": "e8d78d57d1e0438a051682277b2fb68178db03f14dff349e335ac98565991c85",
+      "status": "ok"
+    },
+    {
+      "case_id": "dict",
+      "description": "dict {'key': 'value', 'num': 10}",
+      "dump_length": 24,
+      "sha256": "34595a9607b2005fef8726e8c3670e881713502bdaf0a78756402805f358a6b6",
+      "status": "ok"
+    },
+    {
+      "case_id": "tuple",
+      "description": "tuple (1, 'a', 3.14)",
+      "dump_length": 19,
+      "sha256": "6cb78bcff30a1f9666d32dbdf14521ea010f51da41735416f787f6b332040ca3",
+      "status": "ok"
+    },
+    {
+      "case_id": "seg",
+      "description": "tuple ('c', 'a', 'b')",
+      "dump_length": 11,
+      "sha256": "15de01f4a5cadd3cf79448d66d9c0bca723814797bdeb349f14b134111e2188a",
+      "status": "ok"
+    },
+    {
+      "case_id": "set",
+      "description": "set {1, 2, 3}",
+      "dump_length": 20,
+      "sha256": "cddf0b000e7d5e4d9d7ffbbf3ecc0f056e311652a56278e911321cfc9c588ec9",
+      "status": "ok"
+    },
+    {
+      "case_id": "bool",
+      "description": "bool True",
+      "dump_length": 1,
+      "sha256": "e632b7095b0bf32c260fa4c539e9fd7b852d0de454e9be26f24d0d6f91d069d3",
+      "status": "ok"
+    },
+    {
+      "case_id": "none",
+      "description": "NoneType None",
+      "dump_length": 1,
+      "sha256": "8ce86a6ae65d3692e7305e2c58ac62eebd97d3d943e093f577da25c36988246b",
+      "status": "ok"
+    },
+    {
+      "case_id": "nested",
+      "description": "dict {'a': [1, {'b': 2}], 'c': (3, 4)}",
+      "dump_length": 40,
+      "sha256": "1a418d0ba7e0f816f36756f3e9d8921927a6ae993dc7577977cbb891aab7f0af",
+      "status": "ok"
+    },
+    {
+      "case_id": "ordered_dict",
+      "description": "OrderedDict OrderedDict([('a', 1), ('b', 2)])",
+      "error": "ValueError: unmarshallable object",
+      "status": "error"
+    },
+    {
+      "case_id": "recursive_list",
+      "description": "list [[...]]",
+      "dump_length": 10,
+      "sha256": "d77105626a6c7416c78bc6bb583d35560e158f58dac24718da9cf23f06e2fe85",
+      "status": "ok"
+    },
+    {
+      "case_id": "custom_class",
+      "description": "_UnsupportedClass <src.specimens._UnsupportedClass object at 0x000001CAE1FDF5B0>",
+      "error": "ValueError: unmarshallable object",
+      "status": "error"
+    },
+    {
+      "case_id": "datetime",
+      "description": "datetime datetime.datetime(2025, 5, 20, 10, 30)",
+      "error": "ValueError: unmarshallable object",
+      "status": "error"
+    },
+    {
+      "case_id": "decimal",
+      "description": "Decimal Decimal('3.14159')",
+      "error": "ValueError: unmarshallable object",
+      "status": "error"
+    },
+    {
+      "case_id": "uuid",
+      "description": "UUID UUID('12345678-1234-5678-1234-567812345678')",
+      "error": "ValueError: unmarshallable object",
+      "status": "error"
+    },
+    {
+      "case_id": "max_int",
+      "description": "int 9223372036854775807",
+      "dump_length": 15,
+      "sha256": "7da212917f2e476cf4865db2c13815055c744e353a553464833b8c812de25fcf",
+      "status": "ok"
+    },
+    {
+      "case_id": "min_int",
+      "description": "int -9223372036854775808",
+      "dump_length": 15,
+      "sha256": "1d14c0165fb31ea4cbd0bb1b47e51ff68e5b351ac4e805209bc25b8a011c9e8a",
+      "status": "ok"
+    },
+    {
+      "case_id": "zero",
+      "description": "int 0",
+      "dump_length": 5,
+      "sha256": "e8ebd827d1f36d7cfa5e5220610aa6370284d1589989363f48ac40166362d449",
+      "status": "ok"
+    },
+    {
+      "case_id": "long_str",
+      "description": "str 'abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-ab...",
+      "dump_length": 7005,
+      "sha256": "790e3e8c4a5a47f66d4b1639a77fbc3ea0f6b22d4449848f6f5e9a94fed17a20",
+      "status": "ok"
+    },
+    {
+      "case_id": "empty_str",
+      "description": "str ''",
+      "dump_length": 2,
+      "sha256": "153d812467db095632c6583da7f82cf7ad1e3f9ef18b6358c10f28d2804822f4",
+      "status": "ok"
+    },
+    {
+      "case_id": "empty_list",
+      "description": "list []",
+      "dump_length": 5,
+      "sha256": "cd13cd2473c97737511c66500c332fdf9ad78c5f6e8d4eb4fea992bb63f42055",
+      "status": "ok"
+    },
+    {
+      "case_id": "large_list",
+      "description": "list [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41...",
+      "dump_length": 10245,
+      "sha256": "c5255a08051dd46072c3658a0ecf5db144932df41227c6fd6eb4098e99321e8e",
+      "status": "ok"
+    },
+    {
+      "case_id": "empty_dict",
+      "description": "dict {}",
+      "dump_length": 2,
+      "sha256": "fa433c89e61178902327da13af7dc0b09aede94a362de11626c21700a658c353",
+      "status": "ok"
+    },
+    {
+      "case_id": "max_float",
+      "description": "float inf",
+      "dump_length": 9,
+      "sha256": "a723a76079a60280dcdb2d7984a2adf4a0874e31b9518b30dfc0cfd9c3b53c54",
+      "status": "ok"
+    },
+    {
+      "case_id": "min_float",
+      "description": "float -inf",
+      "dump_length": 9,
+      "sha256": "860d99b42a646c71e28db195c6fdd2478e70455cb540732d1204ea023e3fb0cf",
+      "status": "ok"
+    },
+    {
+      "case_id": "nan_float",
+      "description": "float nan",
+      "dump_length": 9,
+      "sha256": "c0071368d2b0e5cb29b0995db32ea00ef9a3c215871dbabf0d4146930d1c7196",
+      "status": "ok"
+    },
+    {
+      "case_id": "decimal_max",
+      "description": "Decimal Decimal('1E+1000')",
+      "error": "ValueError: unmarshallable object",
+      "status": "error"
+    },
+    {
+      "case_id": "decimal_min",
+      "description": "Decimal Decimal('-1E+1000')",
+      "error": "ValueError: unmarshallable object",
+      "status": "error"
+    },
+    {
+      "case_id": "deep_nested_list",
+      "description": "list [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['leaf']]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]",
+      "dump_length": 326,
+      "sha256": "1ca5cab5f6111aac97615097f3665c36aea41aeb5f227fb5810276b8d1ec7747",
+      "status": "ok"
+    },
+    {
+      "case_id": "long_tuple",
+      "description": "tuple (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41...",
+      "dump_length": 5005,
+      "sha256": "445b652c941e9c4865627990f4f933f1c7f6946fe8d0f016f94b61080b202ae1",
+      "status": "ok"
+    },
+    {
+      "case_id": "long_bytes",
+      "description": "bytes b'\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x0...",
+      "dump_length": 4101,
+      "sha256": "6606ff008658bc7d5664bfdaff255c38322071b0be3b9bbe237faef2bffd5028",
+      "status": "ok"
+    },
+    {
+      "case_id": "oldest_date",
+      "description": "datetime datetime.datetime(1, 1, 1, 0, 0)",
+      "error": "ValueError: unmarshallable object",
+      "status": "error"
+    },
+    {
+      "case_id": "future_date",
+      "description": "datetime datetime.datetime(9999, 12, 31, 23, 59, 59, 999999)",
+      "error": "ValueError: unmarshallable object",
+      "status": "error"
+    },
+    {
+      "case_id": "fuzz_0",
+      "description": "dict {'module': 'marshal', 'active': True, 'data': [None, 21, 1, 'NaN', 'tag-L', 82], 'payload': {'=[\\n1R': None, \"a'}G\": None, 'mNxEA': '<marshal\\nbytes>'}}",
+      "dump_length": 117,
+      "sha256": "472b9fe46ee2cc8704cc1f96f72812aae63dd6b78693786f2896597649bd60d3",
+      "status": "ok"
+    },
+    {
+      "case_id": "fuzz_1",
+      "description": "dict {'module': 'marshal', 'active': False, 'data': ['e3kR?\\'Ffg-\"XB^F\\nC~Gv&']}",
+      "dump_length": 62,
+      "sha256": "ee259bf395fec99e44581e0c68a99f92a005242b6c77a37ecb5b44bb4c8c7293",
+      "status": "ok"
+    },
+    {
+      "case_id": "fuzz_2",
+      "description": "list ['<@rHLd29n', 581, {'edge': 'unicode-\u6d4b\u8bd5'}]",
+      "dump_length": 48,
+      "sha256": "e6dfc07e51df8b6503297dff0623b380706ad293e308efd348c29db6a9414514",
+      "status": "ok"
+    },
+    {
+      "case_id": "true",
+      "description": "bool True",
+      "dump_length": 1,
+      "sha256": "e632b7095b0bf32c260fa4c539e9fd7b852d0de454e9be26f24d0d6f91d069d3",
+      "status": "ok"
+    },
+    {
+      "case_id": "false",
+      "description": "bool False",
+      "dump_length": 1,
+      "sha256": "f67ab10ad4e4c53121b6a5fe4da9c10ddee905b978d3788d2723d7bfacbe28a9",
+      "status": "ok"
+    },
+    {
+      "case_id": "ellipsis",
+      "description": "ellipsis Ellipsis",
+      "dump_length": 1,
+      "sha256": "cdb4ee2aea69cc6a83331bbe96dc2caa9a299d21329efb0336fc02a82e1839a8",
+      "status": "ok"
+    },
+    {
+      "case_id": "stop_iteration",
+      "description": "type <class 'StopIteration'>",
+      "dump_length": 1,
+      "sha256": "8de0b3c47f112c59745f717a626932264c422a7563954872e237b223af4ad643",
+      "status": "ok"
+    },
+    {
+      "case_id": "int_regular",
+      "description": "int 42",
+      "dump_length": 5,
+      "sha256": "3c3e5f0b175ca9da4f2e28aaa9b4a9c08f37369cd16d7de1b3901512c5f92e46",
+      "status": "ok"
+    },
+    {
+      "case_id": "int_zero",
+      "description": "int 0",
+      "dump_length": 5,
+      "sha256": "e8ebd827d1f36d7cfa5e5220610aa6370284d1589989363f48ac40166362d449",
+      "status": "ok"
+    },
+    {
+      "case_id": "int_one",
+      "description": "int 1",
+      "dump_length": 5,
+      "sha256": "59e562517a08b1f9edb930c1553aaf2e6947c1000705dfa4ed20b03b29363da1",
+      "status": "ok"
+    },
+    {
+      "case_id": "int_negative_one",
+      "description": "int -1",
+      "dump_length": 5,
+      "sha256": "72aea108d59af9a3db0854601259c9d9a62dce69f656f4a3f4e451500fb85a1f",
+      "status": "ok"
+    },
+    {
+      "case_id": "int_min_64",
+      "description": "int -9223372036854775808",
+      "dump_length": 15,
+      "sha256": "1d14c0165fb31ea4cbd0bb1b47e51ff68e5b351ac4e805209bc25b8a011c9e8a",
+      "status": "ok"
+    },
+    {
+      "case_id": "int_255",
+      "description": "int 255",
+      "dump_length": 5,
+      "sha256": "810c71fd86b02c0791fa803d7eed5ab6457c5b7af5f468bb17b265d79b48a7f3",
+      "status": "ok"
+    },
+    {
+      "case_id": "int_256",
+      "description": "int 256",
+      "dump_length": 5,
+      "sha256": "f999bb7bff876cad6bc876d0f310c268647415c1cff7eb3d84b0b64f1a6b1b35",
+      "status": "ok"
+    },
+    {
+      "case_id": "int_2_31_minus_1",
+      "description": "int 2147483647",
+      "dump_length": 5,
+      "sha256": "e516a8460a50e97422bd42df9be24ed73081da8f9758f196c6ce7569e5b4850f",
+      "status": "ok"
+    },
+    {
+      "case_id": "int_2_31",
+      "description": "int 2147483648",
+      "dump_length": 11,
+      "sha256": "70f286d27bc1e55c830066343a8fe2489d76660e68b3a62cd943ad76d574aa4a",
+      "status": "ok"
+    },
+    {
+      "case_id": "int_2_63_minus_1",
+      "description": "int 9223372036854775807",
+      "dump_length": 15,
+      "sha256": "7da212917f2e476cf4865db2c13815055c744e353a553464833b8c812de25fcf",
+      "status": "ok"
+    },
+    {
+      "case_id": "int_2_63",
+      "description": "int 9223372036854775808",
+      "dump_length": 15,
+      "sha256": "95d4ad4027f527c14a76f13cf23b94c45272e82a4be8407bbab87cbc83522728",
+      "status": "ok"
+    },
+    {
+      "case_id": "int_huge",
+      "description": "int 1044388881413152506691752710716624382579964249047383780384233483283953907971557456848826811934997558340890106714439262837987573438185793607263236087851365277...",
+      "dump_length": 553,
+      "sha256": "4e1e9b821c37040e0de1320d53270bae6b5a2b2850073a18787c9aedca6d452b",
+      "status": "ok"
+    },
+    {
+      "case_id": "int_negative_huge",
+      "description": "int -104438888141315250669175271071662438257996424904738378038423348328395390797155745684882681193499755834089010671443926283798757343818579360726323608785136527...",
+      "dump_length": 553,
+      "sha256": "609c296d7d67ce47681e5a78a89db30b680b2ccdf8fd85543e1fd98a7167bb2e",
+      "status": "ok"
+    },
+    {
+      "case_id": "float_pi",
+      "description": "float 3.14159",
+      "dump_length": 9,
+      "sha256": "e74d2743340ae0c9211d4135b19015c8c5a2682cceee02b704599c1c7f704240",
+      "status": "ok"
+    },
+    {
+      "case_id": "float_zero",
+      "description": "float 0.0",
+      "dump_length": 9,
+      "sha256": "a7b2474c2b69133fff4c0515276a03bbf9d1c38d1d1f8c08bd5db478181398d6",
+      "status": "ok"
+    },
+    {
+      "case_id": "float_negative_zero",
+      "description": "float -0.0",
+      "dump_length": 9,
+      "sha256": "61d36befa08b84a6b58ddc977ad118100fb1e244e7be671d6f1e027ba585a163",
+      "status": "ok"
+    },
+    {
+      "case_id": "float_one",
+      "description": "float 1.0",
+      "dump_length": 9,
+      "sha256": "e574874a68d6058d6964c76836f36b4ddd75aee39f039c40fdad1b2a74361e46",
+      "status": "ok"
+    },
+    {
+      "case_id": "float_negative_one",
+      "description": "float -1.0",
+      "dump_length": 9,
+      "sha256": "e90fb050b711c19aec69b560ea01231514d62db4ad42f237f90b71def457f7e8",
+      "status": "ok"
+    },
+    {
+      "case_id": "float_max_finite",
+      "description": "float 1.7976931348623157e+308",
+      "dump_length": 9,
+      "sha256": "cf031cbdcce7c98ae2d07c03fec0b325cc44716e572ac53089b4f89230c97921",
+      "status": "ok"
+    },
+    {
+      "case_id": "float_min_positive",
+      "description": "float 2.2250738585072014e-308",
+      "dump_length": 9,
+      "sha256": "9011ea8add4af2315a691d58b88c2f4f059be77e3ac20f2681b0d1ccc6143634",
+      "status": "ok"
+    },
+    {
+      "case_id": "float_subnormal",
+      "description": "float 5e-324",
+      "dump_length": 9,
+      "sha256": "caec16c6b6f9a5b48ce9c9a9afa476b7af4edcddab6948069514f2b25064a45f",
+      "status": "ok"
+    },
+    {
+      "case_id": "float_inf",
+      "description": "float inf",
+      "dump_length": 9,
+      "sha256": "a723a76079a60280dcdb2d7984a2adf4a0874e31b9518b30dfc0cfd9c3b53c54",
+      "status": "ok"
+    },
+    {
+      "case_id": "float_negative_inf",
+      "description": "float -inf",
+      "dump_length": 9,
+      "sha256": "860d99b42a646c71e28db195c6fdd2478e70455cb540732d1204ea023e3fb0cf",
+      "status": "ok"
+    },
+    {
+      "case_id": "float_nan",
+      "description": "float nan",
+      "dump_length": 9,
+      "sha256": "c0071368d2b0e5cb29b0995db32ea00ef9a3c215871dbabf0d4146930d1c7196",
+      "status": "ok"
+    },
+    {
+      "case_id": "complex_simple",
+      "description": "complex (1.5-2.25j)",
+      "dump_length": 17,
+      "sha256": "a98a2d34a4deb22ed1be5b11c30f0c76bbac8c946dc72cfaebd3580b8c95ea67",
+      "status": "ok"
+    },
+    {
+      "case_id": "complex_with_nan",
+      "description": "complex (nan-0j)",
+      "dump_length": 17,
+      "sha256": "07cb6d97e9556b73fb9b50b4ac142b45419d37e23b73ae780c0300e769bc8966",
+      "status": "ok"
+    },
+    {
+      "case_id": "string_empty",
+      "description": "str ''",
+      "dump_length": 2,
+      "sha256": "153d812467db095632c6583da7f82cf7ad1e3f9ef18b6358c10f28d2804822f4",
+      "status": "ok"
+    },
+    {
+      "case_id": "string_ascii",
+      "description": "str 'plain ascii text'",
+      "dump_length": 18,
+      "sha256": "5c8f846c88654ab2900943c438662436b552c16de968ff88fa9604393bc407b8",
+      "status": "ok"
+    },
+    {
+      "case_id": "string_hello",
+      "description": "str 'hello world'",
+      "dump_length": 13,
+      "sha256": "233db27858826e2af6235757b42b2421d4cea8121c45fea323d58eb804810f5d",
+      "status": "ok"
+    },
+    {
+      "case_id": "string_unicode",
+      "description": "str 'unicode-\u6d4b\u8bd5-\u03c0'",
+      "dump_length": 22,
+      "sha256": "f730f4bb0f8d462b288a9f9994f70b5704988113fc731c071d671561eb4c3e6a",
+      "status": "ok"
+    },
+    {
+      "case_id": "string_chinese",
+      "description": "str '\u4f60\u597d\uff0c\u4e16\u754c'",
+      "dump_length": 20,
+      "sha256": "6f817facc3ac7e43d923f1c7e376fe6aa89d4bd56bc4007763c7bb1c41cd2700",
+      "status": "ok"
+    },
+    {
+      "case_id": "string_emoji",
+      "description": "str 'emoji-\ud83d\ude00-\ud83d\ude80'",
+      "dump_length": 20,
+      "sha256": "d1fabbc7a773ae472ad9d43098bed4569133aca3d3533d4d15199e2fcb377fc5",
+      "status": "ok"
+    },
+    {
+      "case_id": "string_long",
+      "description": "str 'abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-abc123-ab...",
+      "dump_length": 7005,
+      "sha256": "790e3e8c4a5a47f66d4b1639a77fbc3ea0f6b22d4449848f6f5e9a94fed17a20",
+      "status": "ok"
+    },
+    {
+      "case_id": "path_windows_like",
+      "description": "str 'C:\\\\Users\\\\example\\\\Desktop\\\\software-testing'",
+      "dump_length": 43,
+      "sha256": "3ba18e157acff55b92e42dafb97fd75c2e4355b2fca6ad8fe703bbd799a1f554",
+      "status": "ok"
+    },
+    {
+      "case_id": "path_posix_like",
+      "description": "str '/home/example/software-testing'",
+      "dump_length": 32,
+      "sha256": "78f943b7b4257b79a13d986c7c0ef8fee7a8654b015735a07516fe432242f451",
+      "status": "ok"
+    },
+    {
+      "case_id": "bytes_empty",
+      "description": "bytes b''",
+      "dump_length": 5,
+      "sha256": "1e39f9576a47375992ed7b53b49a4fe68e1622c87227165ee0246d3c345996f1",
+      "status": "ok"
+    },
+    {
+      "case_id": "bytes_null",
+      "description": "bytes b'\\x00inside\\x00'",
+      "dump_length": 13,
+      "sha256": "54cf3e75bf5964140c3e50e51f233fb83399ad21597bc1786e0ffa8180ba5877",
+      "status": "ok"
+    },
+    {
+      "case_id": "bytes_all_byte_values",
+      "description": "bytes b'\\x00\\x01\\x02\\x03\\x04\\x05\\x06\\x07\\x08\\t\\n\\x0b\\x0c\\r\\x0e\\x0f\\x10\\x11\\x12\\x13\\x14\\x15\\x16\\x17\\x18\\x19\\x1a\\x1b\\x1c\\x1d\\x1e\\x1f !\"#$%&\\'()*+,-./0123456789:;<=>?...",
+      "dump_length": 261,
+      "sha256": "0b08ed82f6c155739862b18db0d9bcd0717c90a3bd87e72a5828d85356b79078",
+      "status": "ok"
+    },
+    {
+      "case_id": "bytes_repeated_nulls",
+      "description": "bytes b'\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x0...",
+      "dump_length": 4101,
+      "sha256": "6606ff008658bc7d5664bfdaff255c38322071b0be3b9bbe237faef2bffd5028",
+      "status": "ok"
+    },
+    {
+      "case_id": "bytes_long",
+      "description": "bytes b'\\x00\\x01\\x02\\x03\\x04\\x05\\x06\\x07\\x08\\t\\n\\x0b\\x0c\\r\\x0e\\x0f\\x10\\x11\\x12\\x13\\x14\\x15\\x16\\x17\\x18\\x19\\x1a\\x1b\\x1c\\x1d\\x1e\\x1f !\"#$%&\\'()*+,-./0123456789:;<=>?...",
+      "dump_length": 4101,
+      "sha256": "2c5d4e5fa566e24c3ba6ab5ef79260f1c44425985bb9734d844a9a43e728d234",
+      "status": "ok"
+    },
+    {
+      "case_id": "list_empty",
+      "description": "list []",
+      "dump_length": 5,
+      "sha256": "cd13cd2473c97737511c66500c332fdf9ad78c5f6e8d4eb4fea992bb63f42055",
+      "status": "ok"
+    },
+    {
+      "case_id": "list_simple",
+      "description": "list [1, 2, 3]",
+      "dump_length": 20,
+      "sha256": "e8d78d57d1e0438a051682277b2fb68178db03f14dff349e335ac98565991c85",
+      "status": "ok"
+    },
+    {
+      "case_id": "list_single",
+      "description": "list [1]",
+      "dump_length": 10,
+      "sha256": "071faf4be14deab4120f7589142827a8907297e57d4f5443d67717f37ff1c1f7",
+      "status": "ok"
+    },
+    {
+      "case_id": "list_mixed",
+      "description": "list [None, True, 123, -0.0, 'text', b'bytes']",
+      "dump_length": 37,
+      "sha256": "458c2119273182700892afd5a28f81b963af8211b330e59cbb542e03035e3d0c",
+      "status": "ok"
+    },
+    {
+      "case_id": "list_nested",
+      "description": "list [[1, 2], ['a', {'nested': (3, 4)}], []]",
+      "dump_length": 55,
+      "sha256": "af98dc03a6995d067e69cb013272cec35e5041131ba2edc43bbd8d11a1066cba",
+      "status": "ok"
+    },
+    {
+      "case_id": "list_deep_nested",
+      "description": "list [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['leaf']]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]",
+      "dump_length": 326,
+      "sha256": "1ca5cab5f6111aac97615097f3665c36aea41aeb5f227fb5810276b8d1ec7747",
+      "status": "ok"
+    },
+    {
+      "case_id": "list_large",
+      "description": "list [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41...",
+      "dump_length": 10245,
+      "sha256": "c5255a08051dd46072c3658a0ecf5db144932df41227c6fd6eb4098e99321e8e",
+      "status": "ok"
+    },
+    {
+      "case_id": "tuple_empty",
+      "description": "tuple ()",
+      "dump_length": 2,
+      "sha256": "86c11f10c038a75279e64a09cbc5cacb478a9af27d1b5cce1d1b1cc7e23a1b81",
+      "status": "ok"
+    },
+    {
+      "case_id": "tuple_single",
+      "description": "tuple (1,)",
+      "dump_length": 7,
+      "sha256": "2acf613053bd5b7e696b2e325b85bf7f5f28c935da974ba35820fe64dae5ec79",
+      "status": "ok"
+    },
+    {
+      "case_id": "tuple_mixed",
+      "description": "tuple (1, 'a', 3.14)",
+      "dump_length": 19,
+      "sha256": "6cb78bcff30a1f9666d32dbdf14521ea010f51da41735416f787f6b332040ca3",
+      "status": "ok"
+    },
+    {
+      "case_id": "tuple_nested",
+      "description": "tuple ((1, 2), ('a', 'b'), (None, False))",
+      "dump_length": 26,
+      "sha256": "ae16eaeac629725cc3ae38222055fc47a28d465ad0ff4e4aa646cb51fea424fb",
+      "status": "ok"
+    },
+    {
+      "case_id": "tuple_large",
+      "description": "tuple (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41...",
+      "dump_length": 10245,
+      "sha256": "fcc6ef67dc6c399b934f3a772cf87fd62bcddcdf774cc193db801d9d44d15fc1",
+      "status": "ok"
+    },
+    {
+      "case_id": "dict_empty",
+      "description": "dict {}",
+      "dump_length": 2,
+      "sha256": "fa433c89e61178902327da13af7dc0b09aede94a362de11626c21700a658c353",
+      "status": "ok"
+    },
+    {
+      "case_id": "dict_simple",
+      "description": "dict {'key': 'value', 'num': 10}",
+      "dump_length": 24,
+      "sha256": "34595a9607b2005fef8726e8c3670e881713502bdaf0a78756402805f358a6b6",
+      "status": "ok"
+    },
+    {
+      "case_id": "dict_string_keys",
+      "description": "dict {'alpha': 1, 'beta': [2, 3], 'gamma': None}",
+      "dump_length": 43,
+      "sha256": "1f544d7addc0e765fa1fa25bea0dfbc94f7a45537986993fdd06744a7b489565",
+      "status": "ok"
+    },
+    {
+      "case_id": "dict_int_keys",
+      "description": "dict {0: 'zero', -1: 'minus one', 2147483648: 'large'}",
+      "dump_length": 47,
+      "sha256": "f40d18ec27062a04833ed4f7cf469ed1483c7a91498a44fe12716658a9494343",
+      "status": "ok"
+    },
+    {
+      "case_id": "dict_of_lists",
+      "description": "dict {'numbers': [1, 2, 3], 'letters': ['a', 'b', 'c']}",
+      "dump_length": 54,
+      "sha256": "880713acda1d38d15079f9886875463e8ade378a539501b82cc773afbee20de7",
+      "status": "ok"
+    },
+    {
+      "case_id": "dict_nested",
+      "description": "dict {'outer': {'inner': [1, 2, {'leaf': True}]}}",
+      "dump_length": 42,
+      "sha256": "26b944285427b2cc925baf5cf315722c3eb2abefc0621494beb6a0cb620b62c6",
+      "status": "ok"
+    },
+    {
+      "case_id": "dict_keys_order1",
+      "description": "dict {'alpha': 1, 'beta': 2, 'gamma': 3}",
+      "dump_length": 37,
+      "sha256": "de4173d5c01dfe82a9407ed05a88f515bc836e92d0dc137e20b5fbe5eef0ed8d",
+      "status": "ok"
+    },
+    {
+      "case_id": "dict_keys_order2",
+      "description": "dict {'gamma': 3, 'beta': 2, 'alpha': 1}",
+      "dump_length": 37,
+      "sha256": "b5fe9761b0afbc23e75b1018a0261a42753b671048837d356eab2b0c644a5def",
+      "status": "ok"
+    },
+    {
+      "case_id": "dict_different_insertion_order",
+      "description": "dict {'gamma': 3, 'alpha': 1, 'beta': 2}",
+      "dump_length": 37,
+      "sha256": "14f6948a4639449d1b4cef3b8bce7ba8b1ad2c3c58355e4f4aab446df467fb41",
+      "status": "ok"
+    },
+    {
+      "case_id": "dict_large",
+      "description": "dict {'key-0000': 0, 'key-0001': 1, 'key-0002': 2, 'key-0003': 3, 'key-0004': 4, 'key-0005': 5, 'key-0006': 6, 'key-0007': 7, 'key-0008': 8, 'key-0009': 9, 'key-0...",
+      "dump_length": 15362,
+      "sha256": "e7a641660511fa69c07e2869067de925351d50b281572d9feec5c6b1af3e8fe1",
+      "status": "ok"
+    },
+    {
+      "case_id": "set_empty",
+      "description": "set set()",
+      "dump_length": 5,
+      "sha256": "995046494f919338259e00eb000e87957890be5cb4e30be304e6646e1426578b",
+      "status": "ok"
+    },
+    {
+      "case_id": "set_simple",
+      "description": "set {1, 2, 3}",
+      "dump_length": 20,
+      "sha256": "cddf0b000e7d5e4d9d7ffbbf3ecc0f056e311652a56278e911321cfc9c588ec9",
+      "status": "ok"
+    },
+    {
+      "case_id": "set_ints",
+      "description": "set {256, 1, 2, 3, 255}",
+      "dump_length": 30,
+      "sha256": "ec9a015fb0b20ec5d99fc70ee80d9ed4ed0135ff79f45447b68a99d749803998",
+      "status": "ok"
+    },
+    {
+      "case_id": "set_large_ints",
+      "description": "set {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41...",
+      "dump_length": 5125,
+      "sha256": "b76068b30f14c3a434f5fadcf4f881c8025dfde65f0b47d61923c3742fd5e7f9",
+      "status": "ok"
+    },
+    {
+      "case_id": "frozenset_empty",
+      "description": "frozenset frozenset()",
+      "dump_length": 5,
+      "sha256": "4c237f2998e18f5c62047214de243bf62daa715906dfc6776b948ec9ec2fe2bd",
+      "status": "ok"
+    },
+    {
+      "case_id": "frozenset_large_ints",
+      "description": "frozenset frozenset({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, ...",
+      "dump_length": 5125,
+      "sha256": "c0bb6a28b454e6a73a0dc6870aadd8a583f4b73f4c74319e2eb8599e8fde3d5c",
+      "status": "ok"
+    },
+    {
+      "case_id": "nested_mixed",
+      "description": "dict {'a': [1, {'b': 2}], 'c': (3, 4)}",
+      "dump_length": 40,
+      "sha256": "1a418d0ba7e0f816f36756f3e9d8921927a6ae993dc7577977cbb891aab7f0af",
+      "status": "ok"
+    },
+    {
+      "case_id": "recursive_dict",
+      "description": "dict {'self': {...}}",
+      "dump_length": 13,
+      "sha256": "ba5fe04b4870548bdc6cd91517781a0feb8150ef0ed35966a575fb1ef621bd55",
+      "status": "ok"
+    },
+    {
+      "case_id": "indirect_recursive_list",
+      "description": "list [[[...]]]",
+      "dump_length": 15,
+      "sha256": "552c907331146aa26eda871c57c9beda18650843c305f1751b4812905765c50e",
+      "status": "ok"
+    },
+    {
+      "case_id": "shared_reference_list",
+      "description": "list [['shared'], ['shared']]",
+      "dump_length": 23,
+      "sha256": "c7654eaedd4bcad3f99db5de146e3e8993593c1afca02f026215089033ecf427",
+      "status": "ok"
+    },
+    {
+      "case_id": "code_object_simple",
+      "description": "code <code sample_function at specimen_code.py:2>",
+      "dump_length": 148,
+      "sha256": "83b9a2bfa206310212f636b1428dd7d29f0f65923ef6140c3ba44b9e39c0dd72",
+      "status": "ok"
+    }
+  ],
+  "marshal_version": 4,
+  "platform": "Windows-10-10.0.26200-SP0",
+  "python_version": "3.9.25"
+}

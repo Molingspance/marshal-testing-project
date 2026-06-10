@@ -1,0 +1,17 @@
+{
+  "evidence_files": [
+    "unittest_output.txt",
+    "fuzzing_summary.json",
+    "marshal_hashes.json",
+    "environment_observations.json"
+  ],
+  "fuzzing": {
+    "generation_failure_count": 0,
+    "lexical_loaded_count": 10,
+    "lexical_total": 30
+  },
+  "platform": "Windows-10-10.0.26200-SP0",
+  "python_version": "3.9.25",
+  "results_dir": "results\\results-windows-multi\\py39",
+  "unittest_passed": true
+}

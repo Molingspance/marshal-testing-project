@@ -1,0 +1,47 @@
+{
+  "evidence_dir": "results\\results-windows-multi\\py312",
+  "executable": "D:\\Users\\17977\\anaconda3\\envs\\3.12\\python.exe",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "status": "passed",
+  "steps": [
+    {
+      "command": [
+        "D:\\Users\\17977\\anaconda3\\envs\\3.12\\python.exe",
+        "-m",
+        "compileall",
+        "src",
+        "tools",
+        "tests"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "Listing 'src'...\nListing 'tools'...\nListing 'tests'...\n"
+    },
+    {
+      "command": [
+        "D:\\Users\\17977\\anaconda3\\envs\\3.12\\python.exe",
+        "-m",
+        "unittest"
+      ],
+      "returncode": 0,
+      "stderr": "..D:\\desk\\py\\marshal-testing-project\\src\\oracles.py:271: DeprecationWarning: co_lnotab is deprecated, use co_lines instead.\n  left_value = getattr(left, attr, sentinel)\nD:\\desk\\py\\marshal-testing-project\\src\\oracles.py:272: DeprecationWarning: co_lnotab is deprecated, use co_lines instead.\n  right_value = getattr(right, attr, sentinel)\n.............s.............\n----------------------------------------------------------------------\nRan 29 tests in 0.803s\n\nOK (skipped=1)\n",
+      "stdout": ""
+    },
+    {
+      "command": [
+        "D:\\Users\\17977\\anaconda3\\envs\\3.12\\python.exe",
+        "tools/run_local.py",
+        "--fuzz-count",
+        "2000",
+        "--fuzz-seed",
+        "20260607",
+        "--results-dir",
+        "D:\\desk\\py\\marshal-testing-project\\results\\results-windows-multi\\py312"
+      ],
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "[INFO] Unsupported equivalence-class samples\n  - ordered_dict: OrderedDict OrderedDict({'a': 1, 'b': 2}) [unsupported: ValueError]\n  - custom_class: _UnsupportedClass <src.specimens._UnsupportedClass object at 0x000002121E803E30> [unsupported: ValueError]\n  - datetime: datetime datetime.datetime(2025, 5, 20, 10, 30) [unsupported: ValueError]\n  - decimal: Decimal Decimal('3.14159') [unsupported: ValueError]\n  - uuid: UUID UUID('12345678-1234-5678-1234-567812345678') [unsupported: ValueError]\n[INFO] Unsupported boundary-value samples\n  - decimal_max: Decimal Decimal('1E+1000') [unsupported: ValueError]\n  - decimal_min: Decimal Decimal('-1E+1000') [unsupported: ValueError]\n  - oldest_date: datetime datetime.datetime(1, 1, 1, 0, 0) [unsupported: ValueError]\n  - future_date: datetime datetime.datetime(9999, 12, 31, 23, 59, 59, 999999) [unsupported: ValueError]\n[INFO] Lexical fuzzing result summary\n  - total=30, loaded=10, exceptions={'EOFError': 6, 'ValueError': 14}\n[INFO] System path separator evidence\n  - path separator: '\\\\'\n  - original object: 'Users\\\\example\\\\\u8f6f\u4ef6\u6d4b\u8bd5'\n  - marshalled hex: f51a00000055736572735c6578616d706c655ce8bdafe4bbb6e6b58be8af95\n  - sha256 hash: 34d8b8cfe2f3948956cb5ec2c31f50cb833989ea04ebe105a719a2b9fb9697eb\n[INFO] Set ordering evidence\n  - iteration order: ['stability', 'hash', 'fuzzing', 'python', 'linux', 'marshal', 'windows', 'boundary']\n  - repr: {'stability', 'hash', 'fuzzing', 'python', 'linux', 'marshal', 'windows', 'boundary'}\n  - sha256 hash: e666ea170af3f95f5da37523fc6b17777bd64d4bb061fc9e7894ae2a24fbf8d4\n{\n  \"evidence_files\": [\n    \"unittest_output.txt\",\n    \"fuzzing_summary.json\",\n    \"marshal_hashes.json\",\n    \"environment_observations.json\"\n  ],\n  \"fuzzing\": {\n    \"generation_failure_count\": 0,\n    \"lexical_loaded_count\": 10,\n    \"lexical_total\": 30\n  },\n  \"platform\": \"Windows-11-10.0.26200-SP0\",\n  \"python_version\": \"3.12.13\",\n  \"results_dir\": \"results\\\\results-windows-multi\\\\py312\",\n  \"unittest_passed\": true\n}\n"
+    }
+  ],
+  "version": "3.12"
+}

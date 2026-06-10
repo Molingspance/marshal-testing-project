@@ -1,14 +1,16 @@
 """Run compatibility checks across multiple Python versions.
 
-The script looks for Python 3.9, 3.10, 3.11, 3.12, and 3.13 by default.
-On Windows it prefers the Python launcher, for example ``py -3.11``. The
-default output directory is platform-specific, for example
-``results/results-windows-multi`` on Windows.
+The script looks for Python 3.6 through 3.13 by default.
+It first looks for conda environments whose names match the requested
+versions, for example ``3.9`` and ``3.10``. On Windows it then falls back to
+the Python launcher, for example ``py -3.11``. The default output directory is
+platform-specific, for example ``results/results-windows-multi`` on Windows.
 """
 
 from __future__ import annotations
 
 import argparse
+import functools
 import json
 import os
 import platform
@@ -20,7 +22,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_VERSIONS = ("3.9", "3.10", "3.11", "3.12", "3.13")
+DEFAULT_VERSIONS = ("3.6","3.7","3.8","3.9", "3.10", "3.11", "3.12", "3.13")
 
 
 def platform_slug(system_name: str | None = None) -> str:
@@ -98,13 +100,13 @@ def run_command(command: list[str], cwd: Path = ROOT) -> dict:
 
 
 def candidate_commands(version: str) -> list[list[str]]:
-    commands: list[list[str]] = [[sys.executable]]
+    commands: list[list[str]] = []
+    commands.extend(conda_candidate_commands(version))
+    commands.append([sys.executable])
     if os.name == "nt" and shutil.which("py"):
         commands.append(["py", f"-{version}"])
         for executable in py_launcher_executables().get(version, []):
             commands.append([executable])
-
-    commands.extend(conda_candidate_commands())
 
     executable_names = ["python", f"python{version}"]
     if os.name == "nt":
@@ -114,30 +116,113 @@ def candidate_commands(version: str) -> list[list[str]]:
         if shutil.which(name):
             commands.append([name])
 
-    return commands
+    return unique_commands(commands)
 
 
-def conda_candidate_commands() -> list[list[str]]:
-    candidates: list[Path] = []
+def conda_candidate_commands(version: str) -> list[list[str]]:
+    env_name = version
+    prefixes: list[Path] = []
 
     conda_prefix = os.environ.get("CONDA_PREFIX")
     if conda_prefix:
-        candidates.append(Path(conda_prefix))
+        active_prefix = Path(conda_prefix)
+        if active_prefix.name == env_name:
+            prefixes.append(active_prefix)
+        if active_prefix.parent.name == "envs":
+            prefixes.append(active_prefix.parent / env_name)
 
     home = Path.home()
     if os.name == "nt":
-        candidates.extend([home / "Miniconda3", home / "Anaconda3"])
-        executable_name = "python.exe"
+        conda_roots = [home / "Miniconda3", home / "Anaconda3"]
     else:
-        candidates.extend([home / "miniconda3", home / "anaconda3"])
-        executable_name = "bin/python"
+        conda_roots = [home / "miniconda3", home / "anaconda3"]
+
+    for root in conda_roots:
+        prefixes.append(root / "envs" / env_name)
+
+    prefixes.extend(
+        Path(path_text)
+        for path_text in conda_env_paths_by_name().get(env_name, [])
+    )
 
     commands: list[list[str]] = []
-    for prefix in candidates:
-        executable = prefix / executable_name
+    for prefix in unique_paths(prefixes):
+        executable = conda_python_executable(prefix)
         if executable.exists():
             commands.append([str(executable)])
+
+    conda = conda_executable()
+    if conda:
+        commands.append([conda, "run", "-n", env_name, "python"])
     return commands
+
+
+def conda_python_executable(prefix: Path) -> Path:
+    if os.name == "nt":
+        return prefix / "python.exe"
+    return prefix / "bin" / "python"
+
+
+def conda_executable() -> str | None:
+    candidates = [os.environ.get("CONDA_EXE"), shutil.which("conda")]
+    for candidate in candidates:
+        if not candidate:
+            continue
+        if Path(candidate).exists() or shutil.which(candidate):
+            return candidate
+    return None
+
+
+@functools.cache
+def conda_env_paths_by_name() -> dict[str, list[str]]:
+    conda = conda_executable()
+    if not conda:
+        return {}
+
+    result = run_command([conda, "env", "list", "--json"])
+    if result["returncode"] != 0:
+        return {}
+
+    text = result["stdout"].strip()
+    start = text.find("{")
+    end = text.rfind("}")
+    if start == -1 or end == -1 or end < start:
+        return {}
+
+    try:
+        payload = json.loads(text[start : end + 1])
+    except json.JSONDecodeError:
+        return {}
+
+    versions: dict[str, list[str]] = {}
+    for env_path_text in payload.get("envs", []):
+        env_path = Path(env_path_text)
+        versions.setdefault(env_path.name, []).append(str(env_path))
+    return versions
+
+
+def unique_commands(commands: list[list[str]]) -> list[list[str]]:
+    seen: set[tuple[str, ...]] = set()
+    unique: list[list[str]] = []
+    for command in commands:
+        key = tuple(command)
+        if key in seen:
+            continue
+        seen.add(key)
+        unique.append(command)
+    return unique
+
+
+def unique_paths(paths: list[Path]) -> list[Path]:
+    seen: set[str] = set()
+    unique: list[Path] = []
+    for path in paths:
+        key = str(path).lower() if os.name == "nt" else str(path)
+        if key in seen:
+            continue
+        seen.add(key)
+        unique.append(path)
+    return unique
 
 
 def py_launcher_executables() -> dict[str, list[str]]:
@@ -205,8 +290,8 @@ def find_interpreter(version: str, seen_executables: set[str]) -> dict | None:
     return None
 
 
-def safe_label(system_name: str, version: str) -> str:
-    return f"{platform_slug(system_name)}-py{version.replace('.', '')}"
+def safe_label(_system_name: str, version: str) -> str:
+    return f"py{version.replace('.', '')}"
 
 
 def display_path(path: Path) -> str:

@@ -1,0 +1,69 @@
+{
+  "fuzz_count": 2000,
+  "fuzz_seed": 20260607,
+  "generation_failure_count": 0,
+  "generation_failures": [],
+  "lexical_summary": {
+    "exceptions": {
+      "EOFError": 6,
+      "ValueError": 14
+    },
+    "loaded": 10,
+    "loaded_cases": [
+      {
+        "name": "none:random-suffix",
+        "value": "NoneType None"
+      },
+      {
+        "name": "int:flip-bit-1",
+        "value": "int 123392"
+      },
+      {
+        "name": "int:random-suffix",
+        "value": "int 123456"
+      },
+      {
+        "name": "list:flip-bit-14",
+        "value": "list [1, 536870914, 3]"
+      },
+      {
+        "name": "list:random-suffix",
+        "value": "list [1, 2, 3]"
+      },
+      {
+        "name": "dict:drop-first",
+        "value": "str 'a'"
+      },
+      {
+        "name": "dict:flip-bit-4",
+        "value": "dict {'a': 1}"
+      },
+      {
+        "name": "dict:random-suffix",
+        "value": "dict {'a': 1}"
+      },
+      {
+        "name": "code:flip-bit-96",
+        "value": "code <code <lambda> at D:\\desk\\py\\marshal-testing-proj%ct\\src\\fuzz_generator.py:190>"
+      },
+      {
+        "name": "code:random-suffix",
+        "value": "code <code <lambda> at D:\\desk\\py\\marshal-testing-project\\src\\fuzz_generator.py:190>"
+      }
+    ],
+    "loaded_hashes": [
+      "8ce86a6ae65d3692e7305e2c58ac62eebd97d3d943e093f577da25c36988246b",
+      "8ea557f4c767337a32c0dfa16e9fe863cdd3af610928b2c115cc3f4d86c0c437",
+      "9530b8372f4189ca95cc441e58a7dd8401826bf97e5e1f2ee8ab1a2cb725722c",
+      "11c41163a686ed95dce21282db7b0c817fa1bb8225ed4f4fff5449c5cb59fbf6",
+      "e8d78d57d1e0438a051682277b2fb68178db03f14dff349e335ac98565991c85",
+      "e50f2bd9ffc67f4d80794a6265f0e1f8c585b55d059b52b033443a6d99958392",
+      "f1867b0faa3babeb37093568b979d2571dae3f8b9bbd2e258436da98c11b318b",
+      "f1867b0faa3babeb37093568b979d2571dae3f8b9bbd2e258436da98c11b318b",
+      "2c3341522c2a2db2f7bfd9861664cd5812d3b44267bb2130f59ded86d61d7f47",
+      "42459f342bb5a7a013777388d20a08d47a9c7e7be7508d3cfaf9f65d0956a3e1"
+    ],
+    "seed": 20260607,
+    "total": 30
+  }
+}
