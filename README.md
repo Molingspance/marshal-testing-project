@@ -30,7 +30,7 @@ After collecting the Windows, Linux, and macOS result directories, return to any
 one environment and compare the result directories:
 
 ```bash
-python tools/run_compatibility.py --compare-result-dirs results/results-windows-multi/py310 results/results-linux-multi/py310 results/results-macos-multi/py310
+python tools/run_compatibility.py --compare-result-dirs results/results-windows-multi/py310 results/results-linux-py310 results/results-macos-py310
 ```
 
 ## Windows Multi-Version Python

@@ -408,24 +408,80 @@ def hash_items_by_case(payload: dict, status: str) -> dict[str, dict]:
     }
 
 
+def result_dir_errors(result_dir: Path) -> list[str]:
+    errors = []
+    if not result_dir.exists():
+        return ["directory does not exist"]
+    if not result_dir.is_dir():
+        errors.append("path is not a directory")
+    if not (result_dir / "marshal_hashes.json").exists():
+        errors.append("missing marshal_hashes.json")
+    return errors
+
+
+def environment_summary(payload: dict) -> str:
+    if not payload:
+        return "environment metadata unavailable"
+
+    platform_text = payload.get("platform") or "unknown platform"
+    python_version = payload.get("python_version")
+    if python_version:
+        return f"{platform_text}, Python {python_version}"
+    return str(platform_text)
+
+
+def platform_label(payload: dict, result_dir: Path) -> str:
+    platform_text = str(payload.get("platform") or "")
+    if platform_text.startswith("Windows"):
+        return "Windows"
+    if platform_text.startswith("Linux"):
+        return "Linux"
+    if platform_text.startswith("macOS") or platform_text.startswith("Darwin"):
+        return "macOS"
+
+    path_text = str(result_dir).lower()
+    if "windows" in path_text:
+        return "Windows"
+    if "linux" in path_text:
+        return "Linux"
+    if "macos" in path_text or "darwin" in path_text:
+        return "macOS"
+    return display_path(result_dir)
+
+
 # Compare existing result directories produced on different environments.
 def summarize_result_dir_differences(result_dirs: list[str]) -> list[dict]:
     paths = [result_dir_path(path_text) for path_text in result_dirs]
     if len(paths) < 2:
-        print("[SKIP] At least two result directories are required.")
-        return []
+        message = "At least two result directories are required."
+        print(f"[ERROR] {message}")
+        return [{"status": "error", "message": message}]
+
+    invalid = []
+    for path in paths:
+        errors = result_dir_errors(path)
+        if not errors:
+            continue
+        label = display_path(path)
+        print(f"[ERROR] Invalid result directory {label}: {', '.join(errors)}")
+        invalid.append(
+            {"status": "error", "result_dir": label, "errors": errors}
+        )
+
+    if invalid:
+        return invalid
 
     baseline = paths[0]
     baseline_hashes = load_hash_payload_from_dir(baseline)
     baseline_ok = hash_items_by_case(baseline_hashes, "ok")
     baseline_unsupported = set(hash_items_by_case(baseline_hashes, "error"))
     baseline_env = load_environment_payload_from_dir(baseline)
+    baseline_name = platform_label(baseline_env, baseline)
 
     print("[INFO] Comparing existing marshal result directories.")
-    print(f"[INFO] Baseline result directory: {display_path(baseline)}")
     if baseline_unsupported:
         print(
-            "[INFO] Baseline unsupported items: "
+            f"[INFO] {baseline_name} baseline unsupported items: "
             + ", ".join(sorted(baseline_unsupported))
         )
 
@@ -436,11 +492,16 @@ def summarize_result_dir_differences(result_dirs: list[str]) -> list[dict]:
         compared_unsupported = set(hash_items_by_case(compared_hashes, "error"))
         compared_env = load_environment_payload_from_dir(compared)
 
+        baseline_ok_ids = set(baseline_ok)
+        compared_ok_ids = set(compared_ok)
+        missing_ok = sorted(baseline_ok_ids - compared_ok_ids)
+        extra_ok = sorted(compared_ok_ids - baseline_ok_ids)
+        common_ok = sorted(baseline_ok_ids & compared_ok_ids)
+
         hash_mismatches = []
-        for case_id, baseline_item in baseline_ok.items():
+        for case_id in common_ok:
+            baseline_item = baseline_ok[case_id]
             compared_item = compared_ok.get(case_id)
-            if compared_item is None:
-                continue
             if compared_item["sha256"] != baseline_item["sha256"]:
                 hash_mismatches.append(case_id)
 
@@ -455,32 +516,93 @@ def summarize_result_dir_differences(result_dirs: list[str]) -> list[dict]:
         )
 
         label = display_path(compared)
+        compared_name = platform_label(compared_env, compared)
         if hash_mismatches:
-            print(f"[X] HASH MISMATCH with {label}: {', '.join(hash_mismatches)}")
+            print(
+                f"[X] {compared_name} marshal hash mismatch: "
+                + ", ".join(hash_mismatches)
+            )
+        elif missing_ok or extra_ok:
+            details = []
+            if missing_ok:
+                details.append("missing: " + ", ".join(missing_ok))
+            if extra_ok:
+                details.append("extra: " + ", ".join(extra_ok))
+            print(
+                f"[X] {compared_name} hash case set diff: "
+                + "; ".join(details)
+            )
+        elif not common_ok:
+            print(
+                f"[X] {compared_name} marshal hash comparison skipped: "
+                "no common ok cases"
+            )
         else:
-            print(f"[OK] HASH MATCH with {label}")
+            print(
+                f"[OK] {compared_name} marshal hash match: "
+                f"{len(common_ok)} common ok cases, 0 hash mismatches"
+            )
 
         if unsupported_delta:
             print(
-                f"[X] UNSUPPORTED SET DIFF with {label}: "
+                f"[X] {compared_name} unsupported set diff: "
                 + ", ".join(unsupported_delta)
             )
         else:
-            print(f"[OK] UNSUPPORTED SET MATCH with {label}")
+            print(
+                f"[OK] {compared_name} unsupported set match: "
+                f"{len(baseline_unsupported)} unsupported items, 0 deltas"
+            )
 
-        if path_diff:
-            print(f"[X] PATH SEPARATOR DIFF with {label}: {path_diff}")
         if set_order_diff:
-            print(f"[X] SET ORDER DIFF with {label}: {set_order_diff}")
+            print(
+                f"[DIFF] {compared_name} set order differs from "
+                f"{baseline_name} baseline: {set_order_diff}"
+            )
+        else:
+            print(f"[OK] {compared_name} set order matches {baseline_name} baseline")
+
+        environment_diffs = []
+        if set_order_diff:
+            environment_diffs.append("set_order")
 
         comparisons.append(
             {
                 "compared_dir": label,
+                "compared_name": compared_name,
+                "compared_environment": environment_summary(compared_env),
+                "common_ok_count": len(common_ok),
                 "hash_mismatches": hash_mismatches,
+                "missing_ok_cases": missing_ok,
+                "extra_ok_cases": extra_ok,
                 "path_separator_diff": path_diff,
                 "set_order_diff": set_order_diff,
+                "environment_diffs": environment_diffs,
                 "unsupported_delta": unsupported_delta,
             }
+        )
+
+    print("[SUMMARY] Cross-environment comparison:")
+    print(
+        f"[SUMMARY] {baseline_name} baseline: "
+        f"ok_cases={len(baseline_ok)}, unsupported_items={len(baseline_unsupported)}"
+    )
+    for comparison in comparisons:
+        env_diffs = comparison["environment_diffs"]
+        env_text = ",".join(env_diffs) if env_diffs else "none"
+        print(
+            "[SUMMARY] {name}: common_ok={common_ok}, "
+            "hash_mismatches={hash_mismatches}, missing_ok={missing_ok}, "
+            "extra_ok={extra_ok}, unsupported_delta={unsupported_delta}, "
+            "env_diffs={env_diffs}".format(
+                name=comparison["compared_name"],
+                common_ok=comparison["common_ok_count"],
+                hash_mismatches=len(comparison["hash_mismatches"]),
+                missing_ok=len(comparison["missing_ok_cases"]),
+                extra_ok=len(comparison["extra_ok_cases"]),
+                unsupported_delta=len(comparison["unsupported_delta"]),
+                env_diffs=env_text,
+            )
         )
 
     return comparisons
@@ -568,7 +690,9 @@ def summarize_hash_consistency(runs: list[dict]) -> list[dict]:
 def main() -> int:
     args = parse_args()
     if args.compare_result_dirs:
-        summarize_result_dir_differences(args.compare_result_dirs)
+        comparisons = summarize_result_dir_differences(args.compare_result_dirs)
+        if any(comparison.get("status") == "error" for comparison in comparisons):
+            return 1
         return 0
 
     output_root = Path(args.output_dir)
