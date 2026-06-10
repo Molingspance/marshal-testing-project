@@ -4,6 +4,7 @@ from src.oracles import assert_roundtrip, equivalent
 from src.specimens import build_specimen
 
 
+# Validate recursive and shared-reference structures after marshal round trips.
 class BlackBoxRecursiveReferenceTests(unittest.TestCase):
     def test_recursive_list_preserves_cycle(self):
         loaded = assert_roundtrip(build_specimen("recursive_list"))

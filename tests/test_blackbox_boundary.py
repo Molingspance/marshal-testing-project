@@ -4,6 +4,7 @@ from src.oracles import assert_roundtrip, assert_stable_dumps
 from src.specimens import all_boundary_case_ids, build_specimen
 
 
+# Validate boundary-value specimens with round-trip and hash-stability checks.
 class BlackBoxBoundaryValueTests(unittest.TestCase):
     def test_boundary_values_roundtrip(self):
         for case_id in all_boundary_case_ids():

@@ -323,6 +323,7 @@ def hash_items_by_case(payload: dict, status: str) -> dict[str, dict]:
     }
 
 
+# Compare existing result directories produced on different environments.
 def summarize_result_dir_differences(result_dirs: list[str]) -> list[dict]:
     paths = [result_dir_path(path_text) for path_text in result_dirs]
     if len(paths) < 2:
@@ -422,6 +423,7 @@ def nested_get(payload: dict, field_path: tuple[str, ...]) -> object:
     return current
 
 
+# Compare marshal hashes across Python versions from compatibility runs.
 def summarize_hash_consistency(runs: list[dict]) -> list[dict]:
     passed_runs = [run for run in runs if run.get("status") == "passed"]
     if len(passed_runs) < 2:
@@ -477,6 +479,7 @@ def summarize_hash_consistency(runs: list[dict]) -> list[dict]:
     return comparisons
 
 
+# Dispatch either compatibility execution or result-directory comparison.
 def main() -> int:
     args = parse_args()
     if args.compare_result_dirs:

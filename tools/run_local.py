@@ -132,6 +132,8 @@ def display_samples(
 
 def report_hash_samples() -> dict:
     samples = {}
+    # Include display samples in hash evidence so shown examples are recorded,
+    # while the full unittest suite continues to use the case-id collections.
     for display_samples_dict in (
         equivalence_class_samples(),
         boundary_value_samples(),
@@ -144,6 +146,7 @@ def report_hash_samples() -> dict:
     return samples
 
 
+# Collect hashes for both display samples and the full valid case set.
 def collect_marshal_hashes() -> dict:
     """Collect per-specimen marshal byte-stream hashes for comparison."""
     items = []
@@ -179,6 +182,7 @@ def collect_marshal_hashes() -> dict:
     }
 
 
+# Capture environment-sensitive values for OS comparison evidence.
 def collect_environment_observations() -> dict:
     """Record platform details used by Windows/Linux comparison figures."""
     path_value = os.path.join("Users", "example", "\u8f6f\u4ef6\u6d4b\u8bd5")
@@ -208,6 +212,7 @@ def collect_environment_observations() -> dict:
     }
 
 
+# Print concise evidence sections while keeping supported cases out of stdout.
 def print_report_figure_evidence(
     fuzzing_summary: dict, environment_observations: dict
 ) -> None:
@@ -251,6 +256,7 @@ def print_report_figure_evidence(
     print(f"  - sha256 hash: {set_probe['sha256']}")
 
 
+# Run the local evidence collection workflow for one Python environment.
 def main() -> int:
     args = parse_args()
     if args.results_dir is None and sys.version_info[:2] != REQUIRED_SINGLE_VERSION:

@@ -6,6 +6,7 @@ from src.oracles import assert_raises_reasonable_exception, assert_roundtrip
 from src.specimens import build_specimen
 
 
+# Exercise representative marshal conditions and edge predicates.
 class MarshalConditionCoverageTests(unittest.TestCase):
     def test_nan_and_non_nan_float_paths(self):
         nan_loaded = marshal.loads(marshal.dumps(float("nan")))
