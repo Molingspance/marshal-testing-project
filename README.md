@@ -24,6 +24,15 @@ python3.10 -m unittest
 python3.10 tools/run_local.py --fuzz-count 2000 --results-dir results/results-macos-py310
 ```
 
+## Cross-Environment Result Comparison
+
+After collecting the Windows, Linux, and macOS result directories, return to any
+one environment and compare the result directories:
+
+```bash
+python tools/run_compatibility.py --compare-result-dirs results/results-windows-py310 results/results-linux-py310 results/results-macos-py310
+```
+
 ## Windows Multi-Version Python
 
 ```powershell

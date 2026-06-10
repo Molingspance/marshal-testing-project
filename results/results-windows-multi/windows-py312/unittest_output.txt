@@ -5,6 +5,6 @@ D:\学校\3下\软件测试\course_files_export\marshal-testing-project\src\orac
   right_value = getattr(right, attr, sentinel)
 .............s.............
 ----------------------------------------------------------------------
-Ran 29 tests in 0.761s
+Ran 29 tests in 1.172s
 
 OK (skipped=1)

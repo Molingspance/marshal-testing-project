@@ -432,6 +432,94 @@ def build_specimen(case_id):
     raise KeyError(f"unknown specimen case_id: {case_id}")
 
 
+def equivalence_class_samples():
+    """Return display samples for equivalence-class report evidence."""
+    recursive_list = []
+    recursive_list.append(recursive_list)
+    return OrderedDict(
+        [
+            ("int", 42),
+            ("float", 3.14159),
+            ("str", "hello world"),
+            ("unicode_str", "\u4f60\u597d\uff0c\u4e16\u754c"),
+            ("list", [1, 2, 3]),
+            ("dict", {"key": "value", "num": 10}),
+            ("tuple", (1, "a", 3.14)),
+            ("seg", ("c", "a", "b")),
+            ("set", {1, 2, 3}),
+            ("bool", True),
+            ("none", None),
+            ("nested", {"a": [1, {"b": 2}], "c": (3, 4)}),
+            ("ordered_dict", OrderedDict([("a", 1), ("b", 2)])),
+            ("recursive_list", recursive_list),
+            ("custom_class", _UnsupportedClass()),
+            ("datetime", datetime.datetime(2025, 5, 20, 10, 30)),
+            ("decimal", decimal.Decimal("3.14159")),
+            ("uuid", uuid.UUID("12345678123456781234567812345678")),
+        ]
+    )
+
+
+def boundary_value_samples():
+    """Return display samples for boundary-value report evidence."""
+    deep_nested_list = "leaf"
+    for _ in range(64):
+        deep_nested_list = [deep_nested_list]
+
+    return OrderedDict(
+        [
+            ("max_int", 2**63 - 1),
+            ("min_int", -(2**63)),
+            ("zero", 0),
+            ("long_str", "abc123-" * 1000),
+            ("empty_str", ""),
+            ("empty_list", []),
+            ("large_list", list(range(2048))),
+            ("empty_dict", {}),
+            ("max_float", float("inf")),
+            ("min_float", float("-inf")),
+            ("nan_float", float("nan")),
+            ("decimal_max", decimal.Decimal("1E+1000")),
+            ("decimal_min", decimal.Decimal("-1E+1000")),
+            ("deep_nested_list", deep_nested_list),
+            ("long_tuple", tuple(range(1000))),
+            ("long_bytes", b"\x00" * 4096),
+            ("oldest_date", datetime.datetime.min),
+            ("future_date", datetime.datetime.max),
+        ]
+    )
+
+
+def fuzzing_display_samples():
+    """Return deterministic fuzzing examples for report evidence."""
+    return OrderedDict(
+        [
+            (
+                "fuzz_0",
+                {
+                    "module": "marshal",
+                    "active": True,
+                    "data": [None, 21, 1, "NaN", "tag-L", 82],
+                    "payload": {
+                        "=[\n1R": None,
+                        "a'}G": None,
+                        "mNxEA": "<marshal\nbytes>",
+                    },
+                },
+            ),
+            (
+                "fuzz_1",
+                {
+                    "module": "marshal",
+                    "active": False,
+                    "data": ["e3kR?'Ffg-\"XB^F\nC~Gv&"],
+                },
+            ),
+            ("fuzz_2", ["<@rHLd29n", 581, {"edge": "unicode-\u6d4b\u8bd5"}]),
+        ]
+    )
+
+
 def all_valid_case_ids():
     return VALID_CASE_IDS
 
