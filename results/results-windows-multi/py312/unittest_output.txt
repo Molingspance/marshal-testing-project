@@ -5,6 +5,6 @@ D:\desk\py\marshal-testing-project\src\oracles.py:272: DeprecationWarning: co_ln
   right_value = getattr(right, attr, sentinel)
 .............s.............
 ----------------------------------------------------------------------
-Ran 29 tests in 0.786s
+Ran 29 tests in 0.773s
 
 OK (skipped=1)

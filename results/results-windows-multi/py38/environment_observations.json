@@ -14,18 +14,18 @@
   "sample_joined_path": "Users\\example\\\u8f6f\u4ef6\u6d4b\u8bd5",
   "set_order_probe": {
     "iteration_order": [
-      "marshal",
-      "windows",
       "python",
-      "stability",
-      "boundary",
+      "fuzzing",
+      "windows",
       "hash",
+      "marshal",
       "linux",
-      "fuzzing"
+      "stability",
+      "boundary"
     ],
-    "marshal_hex": "bc08000000da076d61727368616cda0777696e646f7773da06707974686f6eda0973746162696c697479da08626f756e64617279da0468617368da056c696e7578da0766757a7a696e67",
-    "repr": "{'marshal', 'windows', 'python', 'stability', 'boundary', 'hash', 'linux', 'fuzzing'}",
-    "sha256": "ef0e863350af8dde7f170850e69449994e1bc61ed5fd91c41c936955d0d9b675",
+    "marshal_hex": "bc08000000da06707974686f6eda0766757a7a696e67da0777696e646f7773da0468617368da076d61727368616cda056c696e7578da0973746162696c697479da08626f756e64617279",
+    "repr": "{'python', 'fuzzing', 'windows', 'hash', 'marshal', 'linux', 'stability', 'boundary'}",
+    "sha256": "46a1851f689d0978d5d846430d97086e268a1f7989fcbb49936905ca3d3baff7",
     "sorted_values": [
       "boundary",
       "fuzzing",

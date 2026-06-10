@@ -99,7 +99,7 @@
     },
     {
       "case_id": "custom_class",
-      "description": "_UnsupportedClass <src.specimens._UnsupportedClass object at 0x000001536C75F230>",
+      "description": "_UnsupportedClass <src.specimens._UnsupportedClass object at 0x00000257D767F230>",
       "error": "ValueError: unmarshallable object",
       "status": "error"
     },

@@ -40,7 +40,6 @@ target version numbers. The compatibility runner will automatically try these
 conda environments first:
 
 ```powershell
-conda create -n 3.6 python=3.6
 conda create -n 3.7 python=3.7
 conda create -n 3.8 python=3.8
 conda create -n 3.9 python=3.9
