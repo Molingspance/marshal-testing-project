@@ -78,6 +78,5 @@ marshal-testing-project/
     results-linux-py310/       Linux Python 3.10 result output
     results-macos-py310/       macOS Python 3.10 result output
     results-windows-multi/     Windows multi-version Python result output
-      py310/                   Python 3.10 evidence from that OS run
   README.md                    run commands and project layout
 ```
