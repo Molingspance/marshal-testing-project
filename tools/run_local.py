@@ -269,12 +269,14 @@ def main() -> int:
     results_dir.mkdir(parents=True, exist_ok=True)
 
     unittest_result = run_command([sys.executable, "-m", "unittest"])
-    write_text(
-        results_dir / "unittest_output.txt",
-        unittest_result["stdout"] + ("\n" + unittest_result["stderr"] if unittest_result["stderr"] else ""),
-    )
+    unittest_output = unittest_result["stdout"]
+    if unittest_result["stderr"]:
+        unittest_output += "\n" + unittest_result["stderr"]
+    write_text(results_dir / "unittest_output.txt", unittest_output)
 
-    generation_failures = run_generation_fuzz(count=args.fuzz_count, seed=args.fuzz_seed)
+    generation_failures = run_generation_fuzz(
+        count=args.fuzz_count, seed=args.fuzz_seed
+    )
     lexical_summary = summarize_lexical_fuzz(seed=args.fuzz_seed)
     fuzzing_summary = {
         "fuzz_count": args.fuzz_count,

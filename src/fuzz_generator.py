@@ -115,7 +115,9 @@ def generate_value(
         )
     if choice == "dict":
         return {
-            generate_hashable_scalar(rng, max_string_len, max_bytes_len): generate_value(
+            generate_hashable_scalar(
+                rng, max_string_len, max_bytes_len
+            ): generate_value(
                 rng,
                 max_depth - 1,
                 max_container_size,

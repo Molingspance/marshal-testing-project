@@ -49,7 +49,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output-dir",
         default=default_output_dir(),
-        help="parent directory for per-version evidence; defaults to results/results-<os>-multi",
+        help=(
+            "parent directory for per-version evidence; defaults to "
+            "results/results-<os>-multi"
+        ),
     )
     parser.add_argument(
         "--strict",
@@ -213,7 +216,9 @@ def display_path(path: Path) -> str:
         return str(path)
 
 
-def run_for_interpreter(info: dict, args: argparse.Namespace, output_root: Path) -> dict:
+def run_for_interpreter(
+    info: dict, args: argparse.Namespace, output_root: Path
+) -> dict:
     version = info["version"]
     system_name = platform.system() or "unknown"
     evidence_dir = output_root / safe_label(system_name, version)
