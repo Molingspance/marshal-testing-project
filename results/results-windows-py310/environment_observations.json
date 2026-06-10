@@ -1,0 +1,40 @@
+{
+  "hash_seed": "randomized-default",
+  "os_name": "nt",
+  "path_altsep": "/",
+  "path_pathsep": ";",
+  "path_probe": {
+    "marshal_hex": "f51a00000055736572735c6578616d706c655ce8bdafe4bbb6e6b58be8af95",
+    "original_object": "Users\\example\\\u8f6f\u4ef6\u6d4b\u8bd5",
+    "sha256": "34d8b8cfe2f3948956cb5ec2c31f50cb833989ea04ebe105a719a2b9fb9697eb"
+  },
+  "path_sep": "\\",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "python_version": "3.10.0",
+  "sample_joined_path": "Users\\example\\\u8f6f\u4ef6\u6d4b\u8bd5",
+  "set_order_probe": {
+    "iteration_order": [
+      "stability",
+      "python",
+      "hash",
+      "fuzzing",
+      "marshal",
+      "linux",
+      "windows",
+      "boundary"
+    ],
+    "marshal_hex": "bc08000000da0973746162696c697479da06707974686f6eda0468617368da0766757a7a696e67da076d61727368616cda056c696e7578da0777696e646f7773da08626f756e64617279",
+    "repr": "{'stability', 'python', 'hash', 'fuzzing', 'marshal', 'linux', 'windows', 'boundary'}",
+    "sha256": "6c38ff5c3c14f9688de4cf01f7d84b1b63e97633e1f568add44fe0d37096bc7d",
+    "sorted_values": [
+      "boundary",
+      "fuzzing",
+      "hash",
+      "linux",
+      "marshal",
+      "python",
+      "stability",
+      "windows"
+    ]
+  }
+}
