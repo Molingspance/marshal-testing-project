@@ -17,14 +17,14 @@ REQUIRED_SINGLE_VERSION = (3, 10)
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.fuzz_generator import (
+from src.fuzz_generator import (  # noqa: E402
     DEFAULT_CASES,
     DEFAULT_SEED,
     run_generation_fuzz,
     summarize_lexical_fuzz,
 )
-from src.oracles import describe_value, sha256_bytes
-from src.specimens import (
+from src.oracles import describe_value, sha256_bytes  # noqa: E402
+from src.specimens import (  # noqa: E402
     all_valid_case_ids,
     boundary_value_samples,
     build_specimen,
@@ -74,7 +74,8 @@ def parse_args() -> argparse.Namespace:
         "--results-dir",
         default=None,
         help=(
-            "directory where evidence files are written; when running Python 3.10, "
+            "directory where evidence files are written; when running "
+            "Python 3.10, "
             "defaults to results/results-<os>-py310, for example "
             "results/results-windows-py310"
         ),
@@ -259,12 +260,16 @@ def print_report_figure_evidence(
 # Run the local evidence collection workflow for one Python environment.
 def main() -> int:
     args = parse_args()
-    if args.results_dir is None and sys.version_info[:2] != REQUIRED_SINGLE_VERSION:
+    if (
+        args.results_dir is None
+        and sys.version_info[:2] != REQUIRED_SINGLE_VERSION
+    ):
         expected = ".".join(str(part) for part in REQUIRED_SINGLE_VERSION)
         actual = f"{sys.version_info.major}.{sys.version_info.minor}"
         print(
             f"error: default result output is reserved for Python {expected}; "
-            f"current interpreter is Python {actual}. Pass --results-dir explicitly.",
+            f"current interpreter is Python {actual}. "
+            "Pass --results-dir explicitly.",
             file=sys.stderr,
         )
         return 2

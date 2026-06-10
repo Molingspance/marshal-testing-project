@@ -1,6 +1,10 @@
 import unittest
 
-from src.oracles import assert_file_roundtrip, assert_roundtrip, assert_stable_dumps
+from src.oracles import (
+    assert_file_roundtrip,
+    assert_roundtrip,
+    assert_stable_dumps,
+)
 from src.specimens import all_valid_case_ids, build_specimen
 
 
@@ -34,4 +38,3 @@ class BlackBoxEquivalenceTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

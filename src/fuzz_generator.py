@@ -37,7 +37,7 @@ def iter_generated_cases(
 
 
 def run_generation_fuzz(count=DEFAULT_CASES, seed=DEFAULT_SEED):
-    """Run round-trip and same-process stability checks for generated values."""
+    """Run round-trip and stability checks for generated values."""
     failures = []
     for index, value in iter_generated_cases(count=count, seed=seed):
         try:
@@ -158,7 +158,9 @@ def generate_scalar(rng, max_string_len=256, max_bytes_len=256):
     if choice == "float":
         return rng.uniform(-1.0e12, 1.0e12)
     if choice == "special_float":
-        return rng.choice((0.0, -0.0, float("inf"), float("-inf"), float("nan")))
+        return rng.choice(
+            (0.0, -0.0, float("inf"), float("-inf"), float("nan"))
+        )
     if choice == "str":
         return _random_string(rng, max_string_len)
     return _random_bytes(rng, max_bytes_len)
@@ -233,9 +235,13 @@ def summarize_lexical_fuzz(seed=DEFAULT_SEED):
                 }
             )
             try:
-                summary["loaded_hashes"].append(sha256_bytes(marshal.dumps(loaded)))
+                summary["loaded_hashes"].append(
+                    sha256_bytes(marshal.dumps(loaded))
+                )
             except Exception:
-                summary["loaded_hashes"].append("<unmarshallable-loaded-value>")
+                summary["loaded_hashes"].append(
+                    "<unmarshallable-loaded-value>"
+                )
     return summary
 
 

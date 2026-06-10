@@ -46,7 +46,10 @@ def run_whitebox_tests() -> unittest.TestResult:
 def print_coverage_summary(success: bool) -> None:
     print()
     print("Source-guided white-box structural coverage")
-    print("(representative marshal.c obligations, not instrumented C line coverage)")
+    print(
+        "(representative marshal.c obligations, "
+        "not instrumented C line coverage)"
+    )
     print()
     print_statement_coverage(success)
     print()
@@ -59,7 +62,10 @@ def print_coverage_summary(success: bool) -> None:
 
 def print_statement_coverage(success: bool) -> None:
     print("Statement coverage")
-    print(f"{'Name':<65} {'Stmts':>5} {'Miss':>5} {'Cover':>6} {'Missing':>8}")
+    print(
+        f"{'Name':<65} {'Stmts':>5} {'Miss':>5} "
+        f"{'Cover':>6} {'Missing':>8}"
+    )
     for name, count in WHITEBOX_STATEMENT_ITEMS:
         miss = 0 if success else count
         cover = "100%" if success else "0%"
@@ -85,12 +91,18 @@ def print_branch_coverage(success: bool) -> None:
 
 def print_condition_coverage(success: bool) -> None:
     print("Condition coverage")
-    print(f"{'Name':<65} {'Conds':>5} {'Miss':>5} {'Cover':>6} {'Missing':>8}")
+    print(
+        f"{'Name':<65} {'Conds':>5} {'Miss':>5} "
+        f"{'Cover':>6} {'Missing':>8}"
+    )
     for name, condition_count in WHITEBOX_CONDITION_ITEMS:
         miss = 0 if success else condition_count
         cover = "100%" if success else "0%"
         missing = "-" if success else "selected conditions"
-        print(f"{name:<65} {condition_count:>5} {miss:>5} {cover:>6} {missing:>8}")
+        print(
+            f"{name:<65} {condition_count:>5} {miss:>5} "
+            f"{cover:>6} {missing:>8}"
+        )
 
 
 def print_total_coverage(success: bool) -> None:

@@ -65,7 +65,9 @@ class MarshalBranchCoverageTests(unittest.TestCase):
         assert_roundtrip(code_object)
 
         if not supports_allow_code():
-            self.skipTest("allow_code branch is only available in newer Python")
+            self.skipTest(
+                "allow_code branch is only available in newer Python"
+            )
 
         assert_raises_reasonable_exception(
             lambda: marshal.dumps(code_object, allow_code=False)

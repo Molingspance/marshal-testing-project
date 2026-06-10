@@ -13,7 +13,9 @@ class BlackBoxInvalidInputTests(unittest.TestCase):
             with self.subTest(case_id=case_id):
                 value = build_specimen(case_id)
                 try:
-                    assert_raises_reasonable_exception(lambda: marshal.dumps(value))
+                    assert_raises_reasonable_exception(
+                        lambda: marshal.dumps(value)
+                    )
                 finally:
                     close = getattr(value, "close", None)
                     if close is not None:

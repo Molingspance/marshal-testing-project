@@ -433,8 +433,9 @@ def build_specimen(case_id):
     raise KeyError(f"unknown specimen case_id: {case_id}")
 
 
-# These display sample groups mirror representative values from the case-id based test suite above. 
-# They make console output and report screenshots easier to read; 
+# These display sample groups mirror representative values from the case-id
+# based test suite above. They make console output and report screenshots
+# easier to read.
 # the full automated tests still use VALID_CASE_IDS, INVALID_CASE_IDS,
 # BOUNDARY_CASE_IDS, and the fuzzing generators.
 # Provide readable representative samples for equivalence-class evidence.

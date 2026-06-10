@@ -96,13 +96,18 @@ def assert_raises_reasonable_exception(callable_object):
             f"unexpected exception type: {type(exc).__name__}: {exc}"
         ) from exc
 
-    raise AssertionError("expected a reasonable exception, but none was raised")
+    raise AssertionError(
+        "expected a reasonable exception, but none was raised"
+    )
 
 
 def describe_value(value, limit=160):
     """Return a compact description for diagnostics and result logs."""
     if isinstance(value, types.CodeType):
-        text = f"<code {value.co_name} at {value.co_filename}:{value.co_firstlineno}>"
+        text = (
+            f"<code {value.co_name} at "
+            f"{value.co_filename}:{value.co_firstlineno}>"
+        )
     else:
         try:
             text = repr(value)

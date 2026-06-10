@@ -22,7 +22,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_VERSIONS = ("3.7","3.8","3.9", "3.10", "3.11", "3.12", "3.13")
+DEFAULT_VERSIONS = ("3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "3.13")
 
 
 def platform_slug(system_name: str | None = None) -> str:
@@ -190,7 +190,7 @@ def conda_env_paths_by_name() -> dict[str, list[str]]:
         return {}
 
     try:
-        payload = json.loads(text[start : end + 1])
+        payload = json.loads(text[start:end + 1])
     except json.JSONDecodeError:
         return {}
 
@@ -247,7 +247,9 @@ def py_launcher_executables() -> dict[str, list[str]]:
     return versions
 
 
-def probe_interpreter(command: list[str], expected_version: str) -> dict | None:
+def probe_interpreter(
+    command: list[str], expected_version: str
+) -> dict | None:
     code = (
         "import platform, sys; "
         "print(f'{sys.version_info.major}.{sys.version_info.minor}\\t"
@@ -489,7 +491,9 @@ def summarize_result_dir_differences(result_dirs: list[str]) -> list[dict]:
     for compared in paths[1:]:
         compared_hashes = load_hash_payload_from_dir(compared)
         compared_ok = hash_items_by_case(compared_hashes, "ok")
-        compared_unsupported = set(hash_items_by_case(compared_hashes, "error"))
+        compared_unsupported = set(
+            hash_items_by_case(compared_hashes, "error")
+        )
         compared_env = load_environment_payload_from_dir(compared)
 
         baseline_ok_ids = set(baseline_ok)
@@ -560,7 +564,10 @@ def summarize_result_dir_differences(result_dirs: list[str]) -> list[dict]:
                 f"{baseline_name} baseline: {set_order_diff}"
             )
         else:
-            print(f"[OK] {compared_name} set order matches {baseline_name} baseline")
+            print(
+                f"[OK] {compared_name} set order matches "
+                f"{baseline_name} baseline"
+            )
 
         environment_diffs = []
         if set_order_diff:
@@ -585,7 +592,8 @@ def summarize_result_dir_differences(result_dirs: list[str]) -> list[dict]:
     print("[SUMMARY] Cross-environment comparison:")
     print(
         f"[SUMMARY] {baseline_name} baseline: "
-        f"ok_cases={len(baseline_ok)}, unsupported_items={len(baseline_unsupported)}"
+        f"ok_cases={len(baseline_ok)}, "
+        f"unsupported_items={len(baseline_unsupported)}"
     )
     for comparison in comparisons:
         env_diffs = comparison["environment_diffs"]
@@ -690,8 +698,13 @@ def summarize_hash_consistency(runs: list[dict]) -> list[dict]:
 def main() -> int:
     args = parse_args()
     if args.compare_result_dirs:
-        comparisons = summarize_result_dir_differences(args.compare_result_dirs)
-        if any(comparison.get("status") == "error" for comparison in comparisons):
+        result_dirs = args.compare_result_dirs
+        comparisons = summarize_result_dir_differences(result_dirs)
+        has_errors = any(
+            comparison.get("status") == "error"
+            for comparison in comparisons
+        )
+        if has_errors:
             return 1
         return 0
 

@@ -1,7 +1,11 @@
 import marshal
 import unittest
 
-from src.oracles import assert_file_roundtrip, assert_roundtrip, assert_stable_dumps
+from src.oracles import (
+    assert_file_roundtrip,
+    assert_roundtrip,
+    assert_stable_dumps,
+)
 from src.specimens import build_specimen
 
 
